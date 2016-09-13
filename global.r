@@ -14,7 +14,7 @@ class_to <- function(x, new_class) {
   x
 }
 
-na_mat <- function(x) {
+na_mat <- function(x,...) {
   x %>% is.na %>% class_to("numeric") 
 }
 

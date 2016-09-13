@@ -6,7 +6,8 @@ data.sel=reactive({
     }else{
     data.in=read.csv(text=input$mydata[[input$data]])
   }
-  if(input$f!='.') eval(parse(text=paste0('data.in=',input$f,'(data.in)')))
+  if(input$f!='.') eval(parse(text=paste0('data.in=',input$f,'(data.in,use = "pairwise.complete.obs")')))
+  data.in=as.data.frame(data.in)
   return(data.in)
 })  
 
