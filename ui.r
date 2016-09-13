@@ -1,6 +1,12 @@
-ui <- shinyUI(pageWithSidebar(
-  headerPanel("shinyheatmap"),
+ui <- shinyUI(
+  fluidPage(
+    tags$head(tags$link(rel="stylesheet", href="styles.css", type="text/css"),
+              tags$script(src="getdata.js")),
+  sidebarLayout(
   sidebarPanel(
+    h3(id="data-title", "Drop Datasets"),
+    div(class="col-xs-12", id="drop-area", ondragover="dragOver(event)", 
+        ondrop="dropData(event)"),
     selectInput("data","Select Data",c('mtcars','airquality'),selected = 'mtcars'),
     radioButtons("f", "Transform Data", c(Identity=".", Correlation='cor',Sparse='na_mat'),inline = T,selected = '.'),
     radioButtons("seration", "Select Seration", c(OLO="OLO",GW="GW",Mean="mean",None="none"),inline = T,selected = 'OLO'),
@@ -14,9 +20,10 @@ ui <- shinyUI(pageWithSidebar(
   
   mainPanel(
     tabsetPanel(
-      tabPanel("Heatmaply", 
-               plotlyOutput("heatout")
-               )
+      tabPanel("Heatmaply",plotlyOutput("heatout")),
+      tabPanel("Data",uiOutput('tables'))
     ) 
   )
-))
+)
+)
+)
