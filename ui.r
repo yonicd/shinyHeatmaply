@@ -12,7 +12,8 @@ ui <- shinyUI(
     radioButtons("seration", "Select Seration", c(OLO="OLO",GW="GW",Mean="mean",None="none"),inline = T,selected = 'OLO'),
     radioButtons("pal", "Select Color Palette", c(Vidiris="viridis",BrBg="BrBG",Spectral="Spectral",Heat='heat.colors',Grey='grey.colors'),inline = T,selected = 'viridis'),
     sliderInput("ncol", "Set Number of Colors", min = 1, max = 256, value = 256),
-    uiOutput('colRng'),
+    checkboxInput('colRngAuto','Auto Color Range',value = T),
+    conditionalPanel('!input.colRngAuto',uiOutput('colRng')),
     sliderInput("l", "Set Margin Width", min = 0, max = 200, value = 130),
     sliderInput("b", "Set Margin Height", min = 0, max = 200, value = 40),
     sliderInput("r", "Set Rows", min = 1, max = 11, value = 2),
@@ -21,8 +22,9 @@ ui <- shinyUI(
   
   mainPanel(
     tabsetPanel(
-      tabPanel("Heatmaply",plotlyOutput("heatout")),
-      tabPanel("Data",uiOutput('tables'))
+      tabPanel("Heatmaply",
+               plotlyOutput("heatout",height='600px')),
+      tabPanel("Data",dataTableOutput('tables'))
     ) 
   )
 )

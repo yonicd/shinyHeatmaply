@@ -8,6 +8,7 @@ data.sel=reactive({
   }
   if(input$f!='.') eval(parse(text=paste0('data.in=',input$f,'(data.in,use = "pairwise.complete.obs")')))
   data.in=as.data.frame(data.in)
+  data.in=data.in[,sapply(data.in,function(x) class(x))=='numeric']
   return(data.in)
 })  
 
@@ -18,7 +19,7 @@ output$data=renderUI({
 
 output$colRng=renderUI({
   if(!is.null(data.sel())) {
-    rng=range(data.sel()[,sapply(data.sel(),function(x) class(x))=='numeric'],na.rm = T)
+    rng=range(data.sel(),na.rm = T)
   }else{
     rng=range(mtcars)
   }
@@ -28,12 +29,19 @@ output$colRng=renderUI({
   
 interactiveHeatmap<- reactive({
   data.in=data.sel()
+  if(!is.null(input$tables_true_search_columns)) 
+    data.in=data.in[activeRows(input$tables_true_search_columns,data.in),]
+  if(input$colRngAuto){
+    ColLimits=NULL
+  }else{
+    ColLimits=input$colorRng
+  }
   heatmaply(data.in,
             seriate = input$seration,
             colors=eval(parse(text=paste0(input$pal,'(',input$ncol,')'))),
             k_col = input$c, 
             k_row = input$r,
-            limits = input$colorRng) %>% 
+            limits = ColLimits) %>% 
     layout(margin = list(l = input$l, b = input$b))
 })
 
@@ -57,6 +65,18 @@ observeEvent(input$mydata, {
   # }
 })
 
-output$tables=renderTable(data.sel())
+
+output$tables=renderDataTable(data.sel(),server = T,filter='top',
+                              extensions = c('Scroller','FixedHeader','FixedColumns','Buttons','ColReorder'), options = list(
+                                dom = 't',
+                                buttons = c('copy', 'csv', 'excel', 'pdf', 'print','colvis'),
+                                colReorder = TRUE,
+                                scrollX = TRUE,
+                                fixedColumns = TRUE,
+                                fixedHeader = TRUE,
+                                deferRender = TRUE,
+                                scrollY = 500,
+                                scroller = TRUE
+                              ))
 
 })

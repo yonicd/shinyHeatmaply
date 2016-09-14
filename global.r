@@ -4,6 +4,8 @@
 library(RColorBrewer)
 library(shiny)
 library(heatmaply)
+library(DT)
+library(jsonlite)
 library(dplyr)
 
 BrBG <- colorRampPalette(brewer.pal(11, "BrBG"))
@@ -20,6 +22,6 @@ na_mat <- function(x,...) {
 
 d=data(package='datasets')$results[,'Item']
 d=d[!grepl('[\\()]',d)]
-d=d[!d%in%c('UScitiesD','eurodist')]
+d=d[!d%in%c('UScitiesD','eurodist','sleep')]
 d=d[unlist(lapply(d,function(d.in) eval(parse(text=paste0('ncol(as.data.frame(datasets::',d.in,'))')))))>1]
 
