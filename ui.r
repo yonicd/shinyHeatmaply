@@ -8,7 +8,6 @@ ui <- shinyUI(
     div(class="col-xs-12", id="drop-area", ondragover="dragOver(event)",
         ondrop="dropData(event)"),
     uiOutput('data'),
-    downloadLink("downloadData", "Download Widget"),
     radioButtons("f", "Transform Data", c(Identity=".", Correlation='cor',Sparse='na_mat'),inline = T,selected = '.'),
     radioButtons("seration", "Select Seration", c(OLO="OLO",GW="GW",Mean="mean",None="none"),inline = T,selected = 'OLO'),
     radioButtons("pal", "Select Color Palette", c(Vidiris="viridis",BrBg="BrBG",Spectral="Spectral",Heat='heat.colors',Grey='grey.colors'),inline = T,selected = 'viridis'),
@@ -24,6 +23,8 @@ ui <- shinyUI(
   mainPanel(
     tabsetPanel(
       tabPanel("Heatmaply",
+               tags$a(id = 'downloadData', class = paste("btn btn-default shiny-download-link",'mybutton'), href = "", target = "_blank", download = NA, icon("clone"), 'Clone Widget'),
+               tags$head(tags$style(".mybutton{color:white;background-color:blue;} .skin-black .sidebar .mybutton{color: green;}") ),
                plotlyOutput("heatout",height='600px')),
       tabPanel("Data",dataTableOutput('tables'))
     ) 
