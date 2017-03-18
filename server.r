@@ -1,6 +1,6 @@
 server <- shinyServer(function(input, output,session) {	
 
-data.sel=reactive({
+data.sel=eventReactive(input$data,{
   if(input$data%in%d){
     eval(parse(text=paste0('data.in=as.data.frame(datasets::',input$data,')')))
     }else{
@@ -36,6 +36,7 @@ interactiveHeatmap<- reactive({
   }else{
     ColLimits=input$colorRng
   }
+  
   heatmaply(data.in,
             seriate = input$seration,
             colors=eval(parse(text=paste0(input$pal,'(',input$ncol,')'))),
@@ -43,6 +44,7 @@ interactiveHeatmap<- reactive({
             k_row = input$r,
             limits = ColLimits) %>% 
     layout(margin = list(l = input$l, b = input$b))
+    
 })
 
 
@@ -79,4 +81,19 @@ output$tables=renderDataTable(data.sel(),server = T,filter='top',
                                 scroller = TRUE
                               ))
 
+observeEvent({interactiveHeatmap()},{
+  h<-interactiveHeatmap()
+  output$downloadData <- downloadHandler(
+    filename = function() {
+      paste("heatmaply-", Sys.Date(), ".html", sep="")
+    },
+    content = function(file) {
+      
+      htmlwidgets::saveWidget(h,file)
+    }
+  )
 })
+})
+
+
+

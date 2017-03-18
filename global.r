@@ -3,6 +3,7 @@
 
 library(RColorBrewer)
 library(shiny)
+library(htmlwidgets)
 library(heatmaply)
 library(DT)
 library(jsonlite)
