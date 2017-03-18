@@ -27,7 +27,7 @@ output$colRng=renderUI({
 })
 
   
-interactiveHeatmap<- reactive({
+interactiveHeatmap<- eventReactive({data.sel()},{
   data.in=data.sel()
   if(!is.null(input$tables_true_search_columns)) 
     data.in=data.in[activeRows(input$tables_true_search_columns,data.in),]
@@ -48,9 +48,11 @@ interactiveHeatmap<- reactive({
 })
 
 
+observeEvent(input$data,{
 output$heatout <- renderPlotly({
   if(!is.null(input$data))
     interactiveHeatmap()
+})
 })
 
 observeEvent(input$mydata, {
