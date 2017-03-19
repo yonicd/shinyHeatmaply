@@ -69,13 +69,14 @@ interactiveHeatmap<- reactive({
         if(length(input$selCols)>0) data.in=data.in[sample(1:nrow(data.in),input$selRows),input$selCols]
     }
   }
-  ss_num = sapply(data.in,function(x) class(x)) %in% c('numeric','integer') # in order to only transform the numeric values
+  # ss_num = sapply(data.in,function(x) class(x)) %in% c('numeric','integer') # in order to only transform the numeric values
+  ss_num =  sapply(data.in, is.numeric) # in order to only transform the numeric values
     
   if(input$transpose) data.in=t(data.in)
   if(input$transform_fun!='.'){
     if(input$transform_fun=='is.na10') data.in=is.na10(data.in)
     if(input$transform_fun=='cor'){
-      data.in=cor(data.in,use = "pairwise.complete.obs")
+      data.in=cor(data.in[, ss_num],use = "pairwise.complete.obs")
       updateSelectizeInput(session = session,inputId = 'pal',selected = "RdBu")
       updateNumericInput(session = session,inputId = 'colorRng_min',min=-1,max=1,value=-1)
       updateNumericInput(session = session,inputId = 'colorRng_max',min=-1,max=1,value=1)
