@@ -35,7 +35,7 @@ output$colRng=renderUI({
   numericInput("colorRng_min", "Set Color Range (min)", value = min_range, min = -Inf, max = min_range, step = a_good_step)  
   numericInput("colorRng_max", "Set Color Range (max)", value = max_range, min = max_range, max = Inf, step = a_good_step)  
   
-  output$colorRng = c(colorRng_min, colorRng_max)
+  output$colorRng = c(output$colorRng_min, output$colorRng_max)
 })
 
   
