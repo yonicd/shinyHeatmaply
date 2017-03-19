@@ -37,10 +37,10 @@ ui <- shinyUI(
              hr(),
              h4('Dendrogram Manipulation'),
              selectInput('dendrogram','Dendrogram Type',choices = c("both", "row", "column", "none"),selected = 'both'),
+             selectizeInput("seriation", "Seriation", c(OLO="OLO",GW="GW",Mean="mean",None="none"),selected = 'OLO'),
              sliderInput('branches_lwd','Dendrogram Branch Width',value = 0.6,min=0,max=5,step = 0.1),
              sliderInput("r", "Number of Clusters in Row", min = 1, max = 11, value = 2),
-             sliderInput("c", "Number of Clusters in Column", min = 1, max = 11, value = 2),
-             selectizeInput("seriation", "Seriation", c(OLO="OLO",GW="GW",Mean="mean",None="none"),selected = 'OLO')
+             sliderInput("c", "Number of Clusters in Column", min = 1, max = 11, value = 2)             
                      ),             
 
     conditionalPanel('input.showMargin==1',
