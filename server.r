@@ -112,6 +112,8 @@ interactiveHeatmap<- reactive({
   if(input$transform_fun!='.'){
     if(input$transform_fun=='is.na10') data.in=is.na10(data.in)
     if(input$transform_fun=='cor'){
+      updateCheckboxInput(session = session,inputId = 'showColor',value = T)
+      updateCheckboxInput(session = session,inputId = 'colRngAuto',value = F)
       data.in=cor(data.in[, ss_num],use = "pairwise.complete.obs")
     }
     if(input$transform_fun=='log') data.in[, ss_num]= apply(data.in[, ss_num],2,log)
@@ -124,8 +126,8 @@ interactiveHeatmap<- reactive({
       
   if(!is.null(input$tables_true_search_columns)) 
     data.in=data.in[activeRows(input$tables_true_search_columns,data.in),]
-  if(input$colRngAuto||input$transform_fun!='cor'){
-    ColLimits=NULL
+  if(input$colRngAuto){
+    ColLimits=NULL 
   }else{
     ColLimits=c(input$colorRng_min, input$colorRng_max)
   }
