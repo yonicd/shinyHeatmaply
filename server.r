@@ -69,7 +69,7 @@ interactiveHeatmap<- reactive({
             column_text_angle = input$column_text_angle,
             dendrogram = input$dendrogram,
             branches_lwd = input$branches_lwd,
-            seriate = input$seration,
+            seriate = input$seriation,
             colors=eval(parse(text=paste0(input$pal,'(',input$ncol,')'))),
             distfun_row =  distfun_row,
             hclustfun_row = hclustfun_row,
