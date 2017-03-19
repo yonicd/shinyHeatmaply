@@ -11,7 +11,7 @@ ui <- shinyUI(
     column(width=4,selectizeInput("f", "Transform", c(Identity=".",Sqrt='sqrt',log='log',Correlation='cor',Scale='scale',Normalize='normalize',Percentize='percentize',Sparse='sparse'),selected = '.')),
     column(width=4,selectizeInput("seration", "Seration", c(OLO="OLO",GW="GW",Mean="mean",None="none"),selected = 'OLO')),
     
-    h4('Distribution Method'),
+    h4('Distance Method'),
     column(width=6,selectizeInput("distFun_row", "Row", c(Euclidean="euclidean",Maximum='maximum',Manhattan='manhattan',Canberra='canberra',Binary='binary',Minkowski='minkowski'),selected = 'euclidean')),
     column(width=6,selectizeInput("distFun_col", "Column", c(Euclidean="euclidean",Maximum='maximum',Manhattan='manhattan',Canberra='canberra',Binary='binary',Minkowski='minkowski'),selected = 'euclidean')),
     
