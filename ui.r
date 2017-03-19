@@ -8,7 +8,7 @@ ui <- shinyUI(
     uiOutput('data'),
     hr(),h4('Data Preprocessing'),
     column(width=6,selectizeInput('transpose','Transpose',choices = c('No'=FALSE,'Yes'=TRUE),selected = FALSE)),
-    column(width=6,selectizeInput("f", "Transform", c(Identity=".",Sqrt='sqrt',log='log',Correlation='cor',Scale='scale',Normalize='normalize',Percentize='percentize',Sparse='sparse'),selected = '.')),
+    column(width=6,selectizeInput("f", "Transform", c(Identity=".",Sqrt='sqrt',log='log',Scale='scale',Normalize='normalize',Percentize='percentize',"Missing values"='is.na10', Correlation='cor'),selected = '.')),
     
     hr(),h4('Distance Method'),
     column(width=6,selectizeInput("distFun_row", "Row", c(Euclidean="euclidean",Maximum='maximum',Manhattan='manhattan',Canberra='canberra',Binary='binary',Minkowski='minkowski'),selected = 'euclidean')),
