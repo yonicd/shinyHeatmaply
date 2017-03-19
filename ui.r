@@ -22,7 +22,7 @@ ui <- shinyUI(
     hr(),  h4('Additional Parameters'),
     
     column(3,checkboxInput('showColor','Color')),
-    column(3,checkboxInput('showMargin','Widget')),
+    column(3,checkboxInput('showMargin','Layout')),
     column(3,checkboxInput('showDendo','Dendogram')),
     hr(),
     conditionalPanel('input.showColor==1',
@@ -44,7 +44,7 @@ ui <- shinyUI(
                      ),
     conditionalPanel('input.showMargin==1',
     hr(),
-    h4('Widget Manipulation'),
+    h4('Widget Layout'),
     column(4,textInput('main','Title','')),
     column(4,textInput('xlab','X Title','')),
     column(4,textInput('ylab','Y Title','')),
