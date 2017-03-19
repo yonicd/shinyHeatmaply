@@ -193,36 +193,30 @@ output$tables=renderDataTable(data.sel(),server = T,filter='top',
                                 scroller = TRUE
                               ))
 
-# observeEvent({interactiveHeatmap()},{
-#   h<-interactiveHeatmap()
-#   output$downloadData <- downloadHandler(
-#     filename = function() {
-#       paste("heatmaply-", gsub(' ','_',Sys.time()), ".html", sep="")
-#     },
-#     content = function(file) {
-#       
-#       htmlwidgets::saveWidget(h,file)
-#     }
-#   )
-# })
-
-#Doesnt Work
 observeEvent({interactiveHeatmap()},{
   h<-interactiveHeatmap()
-  s1<-'<p><strong>This heatmap visualization was created using <a href="https://github.com/yonicd/shinyHeatmaply/">shinyHeatmaply</a>
-  </strong></p></body>'
-  tempF<-file.path(getwd(),'testHTMLdownload/temp.html')
-  htmlwidgets::saveWidget(h,tempF)
-  tempLines=readLines(tempF)
-  tempLines=gsub('</body>',s1,tempLines)
+  s<-tags$div(style="position: absolute; bottom: 5px;",
+              #tags$p(
+                tags$em('This heatmap visualization was created using',
+                  tags$a(href="https://github.com/yonicd/shinyHeatmaply/",
+                         target="_blank",'shinyHeatmaply')
+                        )
+               # )
+              )
+  
   output$downloadData <- downloadHandler(
     filename = function() {
-      paste("heatmaply-", Sys.Date(), ".html", sep="")
+      paste("heatmaply-", gsub(' ','_',Sys.time()), ".html", sep="")
     },
     content = function(file) {
-
-      cat(tempLines,file = file,sep = '\n')
-
+      libdir <- paste(tools::file_path_sans_ext(basename(file)),"_files", sep = "")
+      htmltools::save_html(htmltools::browsable(htmltools::tagList(h, s)),file=file,libdir = libdir)
+      if (!htmlwidgets:::pandoc_available()) {
+          stop("Saving a widget with selfcontained = TRUE requires pandoc. For details see:\n", 
+          "https://github.com/rstudio/rmarkdown/blob/master/PANDOC.md")
+      }
+      htmlwidgets:::pandoc_self_contained_html(file, file)
+      unlink(libdir, recursive = TRUE)
     }
   )
 })
