@@ -7,7 +7,7 @@ data.sel=eventReactive(input$data,{
     data.in=read.csv(text=input$mydata[[input$data]])
   }
   data.in=as.data.frame(data.in)
-  data.in=data.in[,sapply(data.in,function(x) class(x))%in%c('numeric','integer')]
+  # data.in=data.in[,sapply(data.in,function(x) class(x))%in%c('numeric','integer')] # no need for this
   return(data.in)
 })  
 
