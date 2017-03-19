@@ -23,7 +23,7 @@ ui <- shinyUI(
     
     column(3,checkboxInput('showColor','Color')),
     column(3,checkboxInput('showMargin','Layout')),
-    column(3,checkboxInput('showDendo','Dendogram')),
+    column(3,checkboxInput('showDendo','Dendrogram')),
     hr(),
     conditionalPanel('input.showColor==1',
                      hr(),
@@ -36,9 +36,9 @@ ui <- shinyUI(
     
     conditionalPanel('input.showDendo==1',
              hr(),
-             h4('Dendogram Manipulation'),
+             h4('Dendrogram Manipulation'),
              selectInput('dendrogram','Dendrogram Type',choices = c("both", "row", "column", "none"),selected = 'both'),
-             sliderInput('branches_lwd','Dendogram Branch Width',value = 0.6,min=0,max=5,step = 0.1),
+             sliderInput('branches_lwd','Dendrogram Branch Width',value = 0.6,min=0,max=5,step = 0.1),
              sliderInput("r", "Number of Clusters in Row", min = 1, max = 11, value = 2),
              sliderInput("c", "Number of Clusters in Column", min = 1, max = 11, value = 2)
                      ),
