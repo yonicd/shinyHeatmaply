@@ -7,9 +7,9 @@ ui <- shinyUI(
     div(class="col-xs-12", id="drop-area", ondragover="dragOver(event)",ondrop="dropData(event)"),
     uiOutput('data'),
     hr(),h4('Data Preprocessing'),
-    column(width=6,selectizeInput('transpose','Transpose',choices = c('No'=FALSE,'Yes'=TRUE),selected = FALSE)),
-    column(width=6,selectizeInput("f", "Transform", c(Identity=".",Sqrt='sqrt',log='log',Scale='scale',Normalize='normalize',Percentize='percentize',"Missing values"='is.na10', Correlation='cor'),selected = '.')),
-    
+    column(width=4,selectizeInput('transpose','Transpose',choices = c('No'=FALSE,'Yes'=TRUE),selected = FALSE)),
+    column(width=4,selectizeInput("f", "Transform", c(Identity=".",Sqrt='sqrt',log='log',Scale='scale',Normalize='normalize',Percentize='percentize',"Missing values"='is.na10', Correlation='cor'),selected = '.')),
+    uiOutput('annoVars'),
     hr(),h4('Distance Method'),
     column(width=6,selectizeInput("distFun_row", "Row", c(Euclidean="euclidean",Maximum='maximum',Manhattan='manhattan',Canberra='canberra',Binary='binary',Minkowski='minkowski'),selected = 'euclidean')),
     column(width=6,selectizeInput("distFun_col", "Column", c(Euclidean="euclidean",Maximum='maximum',Manhattan='manhattan',Canberra='canberra',Binary='binary',Minkowski='minkowski'),selected = 'euclidean')),

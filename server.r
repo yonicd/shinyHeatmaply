@@ -7,8 +7,7 @@ data.sel=eventReactive(input$data,{
     data.in=read.csv(text=input$mydata[[input$data]])
   }
   data.in=as.data.frame(data.in)
-  data.in=data.in[,sapply(data.in,function(x) class(x))%in%c('numeric','integer')]
-
+  #data.in=data.in[,sapply(data.in,function(x) class(x))%in%c('numeric','integer')]
   return(data.in)
 })  
 
@@ -19,6 +18,14 @@ output$data=renderUI({
     selData=tail(names(input$mydata),1)
   }
   selectInput("data","Select Data",d,selected = selData)
+})
+
+observeEvent(data.sel(),{
+  output$annoVars<-renderUI({
+    column(width=4,
+           selectizeInput('annoVar','Annotation',choices = names(data.sel()),multiple=T)
+    )
+  })
 })
 
 output$colRng=renderUI({
@@ -47,6 +54,12 @@ interactiveHeatmap<- reactive({
     if(input$f=='cor'){
       data.in=cor(data.in,use = "pairwise.complete.obs")
       updateSelectizeInput(session = session,inputId = 'pal',selected = "RdBu")
+      updateNumericInput(session = session,inputId = 'colorRng_min',min=-1,max=1,value=-1)
+      updateNumericInput(session = session,inputId = 'colorRng_max',min=-1,max=1,value=1)
+      updateCheckboxInput(session=session,inputId = 'colRngAuto',value = F)
+      
+      updateCheckboxInput(session=session,inputId = 'showColor',value = T)
+      updateCheckboxInput(session=session,inputId = 'colRngAuto',value = F)
     }
     if(input$f=='log') data.in=apply(data.in,2,function(x){
       x[x<=0]=1
@@ -73,6 +86,8 @@ interactiveHeatmap<- reactive({
   
   hclustfun_row = function(x) hclust(x, method = input$hclustFun_row)
   hclustfun_col = function(x) hclust(x, method = input$hclustFun_col)
+  
+  if(length(input$annoVar)>0) data.in=data.in%>%mutate_each_(funs(factor),input$annoVar)
   
   heatmaply(data.in,
             main = input$main,xlab = input$xlab,ylab = input$ylab,
