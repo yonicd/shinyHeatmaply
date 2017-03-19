@@ -23,11 +23,19 @@ output$data=renderUI({
 
 output$colRng=renderUI({
   if(!is.null(data.sel())) {
-    rng=range(data.sel(),na.rm = T)
+    rng=range(data.sel(),na.rm = TRUE)
   }else{
-    rng=range(mtcars)
+    rng=range(mtcars) # TODO: this should probably be changed
   }
-  sliderInput("colorRng", "Set Color Range", min = round(rng[1],1), max = round(rng[2],1), step = .1, value = rng)  
+  # sliderInput("colorRng", "Set Color Range", min = round(rng[1],1), max = round(rng[2],1), step = .1, value = rng)  
+  n_data = nrow(data.sel())
+  min_range = rng[1]
+  max_range = rng[2]
+  a_good_step = 0.1 # (max_range-min_range) / n_data
+  numericInput("colorRng_min", "Set Color Range (min)", value = min_range, min = -Inf, max = min_range, step = a_good_step)  
+  numericInput("colorRng_max", "Set Color Range (max)", value = max_range, min = max_range, max = Inf, step = a_good_step)  
+  
+  output$colorRng = c(colorRng_min, colorRng_max)
 })
 
   
