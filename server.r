@@ -42,6 +42,30 @@ output$data=renderUI({
   selectInput("data","Select Data",d,selected = selData)
 })
 
+output$colUI<-renderUI({
+  colSel=ifelse(input$transform_fun=='cor','RdBu','Vidiris')
+  selectizeInput(inputId ="pal", label ="Select Color Palette",
+                 choices = c('Vidiris (Sequential)'="viridis",
+                             'Magma (Sequential)'="magma",
+                             'Plasma (Sequential)'="plasma",
+                             'Inferno (Sequential)'="inferno",
+                             'Magma (Sequential)'="magma",
+                             'Magma (Sequential)'="magma",
+                             
+                             'RdBu (Diverging)'="RdBu",
+                             'RdYlBu (Diverging)'="RdYlBu",
+                             'RdYlGn (Diverging)'="RdYlGn",
+                             'BrBG (Diverging)'="BrBG",
+                             'Spectral (Diverging)'="Spectral",
+                             
+                             'BuGn (Sequential)'='BuGn',
+                             'PuBuGn (Sequential)'='PuBuGn',
+                             'YlOrRd (Sequential)'='YlOrRd',
+                             'Heat (Sequential)'='heat.colors',
+                             'Grey (Sequential)'='grey.colors'),
+                 selected=colSel)
+})
+
 output$colRng=renderUI({
   if(!is.null(data.sel())) {
     rng=range(data.sel(),na.rm = TRUE)
@@ -50,13 +74,22 @@ output$colRng=renderUI({
   }
   # sliderInput("colorRng", "Set Color Range", min = round(rng[1],1), max = round(rng[2],1), step = .1, value = rng)  
   n_data = nrow(data.sel())
-  min_range = rng[1]
-  max_range = rng[2]
+  
+  min_min_range = ifelse(input$transform_fun=='cor',-1,-Inf)
+  min_max_range = ifelse(input$transform_fun=='cor',1,rng[1])
+  min_value = ifelse(input$transform_fun=='cor',-1,rng[1])
+  
+  max_min_range = ifelse(input$transform_fun=='cor',-1,rng[2])
+  max_max_range = ifelse(input$transform_fun=='cor',1,Inf)
+  max_value = ifelse(input$transform_fun=='cor',1,rng[2])
+  
   a_good_step = 0.1 # (max_range-min_range) / n_data
+  
   list(
-    numericInput("colorRng_min", "Set Color Range (min)", value = min_range, min = -Inf, max = min_range, step = a_good_step),
-    numericInput("colorRng_max", "Set Color Range (max)", value = max_range, min = max_range, max = Inf, step = a_good_step)
-  )  
+    numericInput("colorRng_min", "Set Color Range (min)", value = min_value, min = min_min_range, max = min_max_range, step = a_good_step),
+    numericInput("colorRng_max", "Set Color Range (max)", value = max_value, min = max_min_range, max = max_max_range, step = a_good_step)
+  )
+  
 })
 
 
@@ -65,11 +98,14 @@ interactiveHeatmap<- reactive({
   if(input$showSample){
     if(!is.null(input$selRows)){
         set.seed(input$setSeed)
-        if(length(input$selCols)==0) data.in=data.in[sample(1:nrow(data.in),input$selRows),]
-        if(length(input$selCols)>0) data.in=data.in[sample(1:nrow(data.in),input$selRows),input$selCols]
+        if(length(input$selCols)<=1) data.in=data.in[sample(1:nrow(data.in),input$selRows),]
+        if(length(input$selCols)>1) data.in=data.in[sample(1:nrow(data.in),input$selRows),input$selCols]
     }
   }
   # ss_num = sapply(data.in,function(x) class(x)) %in% c('numeric','integer') # in order to only transform the numeric values
+  
+  if(length(input$annoVar)>0) data.in=data.in%>%mutate_each_(funs(factor),input$annoVar)
+  
   ss_num =  sapply(data.in, is.numeric) # in order to only transform the numeric values
     
   if(input$transpose) data.in=t(data.in)
@@ -77,13 +113,6 @@ interactiveHeatmap<- reactive({
     if(input$transform_fun=='is.na10') data.in=is.na10(data.in)
     if(input$transform_fun=='cor'){
       data.in=cor(data.in[, ss_num],use = "pairwise.complete.obs")
-      updateSelectizeInput(session = session,inputId = 'pal',selected = "RdBu")
-      updateNumericInput(session = session,inputId = 'colorRng_min',min=-1,max=1,value=-1)
-      updateNumericInput(session = session,inputId = 'colorRng_max',min=-1,max=1,value=1)
-      updateCheckboxInput(session=session,inputId = 'colRngAuto',value = FALSE)
-      
-      updateCheckboxInput(session=session,inputId = 'showColor',value = TRUE)
-      updateCheckboxInput(session=session,inputId = 'colRngAuto',value = FALSE)
     }
     if(input$transform_fun=='log') data.in[, ss_num]= apply(data.in[, ss_num],2,log)
     if(input$transform_fun=='sqrt') data.in[, ss_num]= apply(data.in[, ss_num],2,sqrt) 
@@ -95,7 +124,7 @@ interactiveHeatmap<- reactive({
       
   if(!is.null(input$tables_true_search_columns)) 
     data.in=data.in[activeRows(input$tables_true_search_columns,data.in),]
-  if(input$colRngAuto){
+  if(input$colRngAuto||input$transform_fun!='cor'){
     ColLimits=NULL
   }else{
     ColLimits=c(input$colorRng_min, input$colorRng_max)
@@ -106,8 +135,6 @@ interactiveHeatmap<- reactive({
   
   hclustfun_row = function(x) hclust(x, method = input$hclustFun_row)
   hclustfun_col = function(x) hclust(x, method = input$hclustFun_col)
-  
-  if(length(input$annoVar)>0) data.in=data.in%>%mutate_each_(funs(factor),input$annoVar)
   
   heatmaply(data.in,
             main = input$main,xlab = input$xlab,ylab = input$ylab,
