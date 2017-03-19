@@ -7,10 +7,10 @@ ui <- shinyUI(
     div(class="col-xs-12", id="drop-area", ondragover="dragOver(event)",ondrop="dropData(event)"),
     uiOutput('data'),
     hr(),h4('Data Preprocessing'),
-    column(width=4,selectizeInput('transpose','Transpose',choices = c('No'=FALSE,'Yes'=TRUE),selected = FALSE)),
-    column(width=4,selectizeInput("f", "Transform", c(Identity=".",Sqrt='sqrt',log='log',Correlation='cor',Scale='scale',Normalize='normalize',Percentize='percentize',Sparse='sparse'),selected = '.')),
+    column(width=6,selectizeInput('transpose','Transpose',choices = c('No'=FALSE,'Yes'=TRUE),selected = FALSE)),
+    column(width=6,selectizeInput("f", "Transform", c(Identity=".",Sqrt='sqrt',log='log',Correlation='cor',Scale='scale',Normalize='normalize',Percentize='percentize',Sparse='sparse'),selected = '.')),
     
-    h4('Distance Method'),
+    hr(),h4('Distance Method'),
     column(width=6,selectizeInput("distFun_row", "Row", c(Euclidean="euclidean",Maximum='maximum',Manhattan='manhattan',Canberra='canberra',Binary='binary',Minkowski='minkowski'),selected = 'euclidean')),
     column(width=6,selectizeInput("distFun_col", "Column", c(Euclidean="euclidean",Maximum='maximum',Manhattan='manhattan',Canberra='canberra',Binary='binary',Minkowski='minkowski'),selected = 'euclidean')),
     
@@ -40,8 +40,8 @@ ui <- shinyUI(
              sliderInput('branches_lwd','Dendrogram Branch Width',value = 0.6,min=0,max=5,step = 0.1),
              sliderInput("r", "Number of Clusters in Row", min = 1, max = 11, value = 2),
              sliderInput("c", "Number of Clusters in Column", min = 1, max = 11, value = 2)
-                     ),
              selectizeInput("seration", "Seration", c(OLO="OLO",GW="GW",Mean="mean",None="none"),selected = 'OLO'),
+                     ),             
 
     conditionalPanel('input.showMargin==1',
     hr(),
