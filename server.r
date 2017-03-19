@@ -6,15 +6,18 @@ data.sel=eventReactive(input$data,{
     }else{
     data.in=read.csv(text=input$mydata[[input$data]])
   }
-  if(input$f!='.') eval(parse(text=paste0('data.in=',input$f,'(data.in,use = "pairwise.complete.obs")')))
   data.in=as.data.frame(data.in)
   data.in=data.in[,sapply(data.in,function(x) class(x))=='numeric']
   return(data.in)
 })  
 
 output$data=renderUI({
-  if(!is.null(input$mydata)) d=c(d,names(input$mydata))
-  selectInput("data","Select Data",d,selected = 'mtcars')
+  selData='mtcars'
+  if(!is.null(input$mydata)){
+    d=c(names(input$mydata),d) 
+    selData=tail(names(input$mydata),1)
+  }
+  selectInput("data","Select Data",d,selected = selData)
 })
 
 output$colRng=renderUI({
@@ -27,8 +30,10 @@ output$colRng=renderUI({
 })
 
   
-interactiveHeatmap<- eventReactive({data.sel()},{
+interactiveHeatmap<- reactive({
   data.in=data.sel()
+
+  if(input$f!='.') eval(parse(text=paste0('data.in=',input$f,'(data.in,use = "pairwise.complete.obs")')))
   if(!is.null(input$tables_true_search_columns)) 
     data.in=data.in[activeRows(input$tables_true_search_columns,data.in),]
   if(input$colRngAuto){
@@ -36,7 +41,6 @@ interactiveHeatmap<- eventReactive({data.sel()},{
   }else{
     ColLimits=input$colorRng
   }
-  
   heatmaply(data.in,
             seriate = input$seration,
             colors=eval(parse(text=paste0(input$pal,'(',input$ncol,')'))),
