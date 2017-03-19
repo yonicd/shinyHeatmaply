@@ -193,40 +193,39 @@ output$tables=renderDataTable(data.sel(),server = T,filter='top',
                                 scroller = TRUE
                               ))
 
-observeEvent({interactiveHeatmap()},{
-  h<-interactiveHeatmap()
-  output$downloadData <- downloadHandler(
-    filename = function() {
-      paste("heatmaply-", gsub(' ','_',Sys.time()), ".html", sep="")
-    },
-    content = function(file) {
-      
-      htmlwidgets::saveWidget(h,file)
-    }
-  )
-})
-
-#Doesnt Work
 # observeEvent({interactiveHeatmap()},{
 #   h<-interactiveHeatmap()
-#   s1<-'<p><strong>This heatmap visualization was created using <a href="https://github.com/yonicd/shinyHeatmaply/">shinyHeatmaply</a>
-#   </strong></p></body>'
-#   tempF<-tempfile()
-#   htmlwidgets::saveWidget(h,tempF)
-#   tempLines=readLines(tempF)
-#   tempLines=gsub('</body>',s1,tempLines)
-#   
 #   output$downloadData <- downloadHandler(
 #     filename = function() {
-#       paste("heatmaply-", Sys.Date(), ".html", sep="")
+#       paste("heatmaply-", gsub(' ','_',Sys.time()), ".html", sep="")
 #     },
 #     content = function(file) {
 #       
-#       cat(tempLines,file = file,sep = '\n')      
-#       
+#       htmlwidgets::saveWidget(h,file)
 #     }
 #   )
 # })
+
+#Doesnt Work
+observeEvent({interactiveHeatmap()},{
+  h<-interactiveHeatmap()
+  s1<-'<p><strong>This heatmap visualization was created using <a href="https://github.com/yonicd/shinyHeatmaply/">shinyHeatmaply</a>
+  </strong></p></body>'
+  tempF<-file.path(getwd(),'testHTMLdownload/temp.html')
+  htmlwidgets::saveWidget(h,tempF)
+  tempLines=readLines(tempF)
+  tempLines=gsub('</body>',s1,tempLines)
+  output$downloadData <- downloadHandler(
+    filename = function() {
+      paste("heatmaply-", Sys.Date(), ".html", sep="")
+    },
+    content = function(file) {
+
+      cat(tempLines,file = file,sep = '\n')
+
+    }
+  )
+})
 
 })
 
