@@ -6,7 +6,7 @@ ui <- shinyUI(
     h2(id="data-title", "Drop Datasets"),
     div(class="col-xs-12", id="drop-area", ondragover="dragOver(event)",ondrop="dropData(event)"),
     uiOutput('data'),
-    hr(),h4('Data Manipulation'),
+    hr(),h4('Data Preprocessing'),
     column(width=4,selectizeInput('transpose','Transpose',choices = c('No'=FALSE,'Yes'=TRUE),selected = FALSE)),
     column(width=4,selectizeInput("f", "Transform", c(Identity=".",Sqrt='sqrt',log='log',Correlation='cor',Scale='scale',Normalize='normalize',Percentize='percentize',Sparse='sparse'),selected = '.')),
     column(width=4,selectizeInput("seration", "Seration", c(OLO="OLO",GW="GW",Mean="mean",None="none"),selected = 'OLO')),
@@ -19,7 +19,7 @@ ui <- shinyUI(
     column(width=6,selectizeInput("hclustFun_row", "Row", c(Complete= "complete",Single= "single",Average= "average",Mcquitty= "mcquitty",Median= "median",Centroid= "centroid",Ward.D= "ward.D",Ward.D2= "ward.D2"),selected = 'complete')),
     column(width=6,selectizeInput("hclustFun_col", "Column", c(Complete= "complete",Single= "single",Average= "average",Mcquitty= "mcquitty",Median= "median",Centroid= "centroid",Ward.D= "ward.D",Ward.D2= "ward.D2"),selected = 'complete')),
   
-    hr(),  h4('Additional Manipulation'),
+    hr(),  h4('Additional Parameters'),
     
     column(3,checkboxInput('showColor','Color')),
     column(3,checkboxInput('showMargin','Widget')),
