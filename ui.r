@@ -13,14 +13,16 @@ ui <- shinyUI(
     column(width=4,selectizeInput("transform_fun", "Transform", c(Identity=".",Sqrt='sqrt',log='log',Scale='scale',Normalize='normalize',Percentize='percentize',"Missing values"='is.na10', Correlation='cor'),selected = '.')),
     uiOutput('annoVars'),
     
-    hr(),h4('Distance Method'),
-    column(width=6,selectizeInput("distFun_row", "Row", c(Euclidean="euclidean",Maximum='maximum',Manhattan='manhattan',Canberra='canberra',Binary='binary',Minkowski='minkowski'),selected = 'euclidean')),
-    column(width=6,selectizeInput("distFun_col", "Column", c(Euclidean="euclidean",Maximum='maximum',Manhattan='manhattan',Canberra='canberra',Binary='binary',Minkowski='minkowski'),selected = 'euclidean')),
+    hr(),h4('Row dendrogram'),
+    column(width=6,selectizeInput("distFun_row", "Distance", c(Euclidean="euclidean",Maximum='maximum',Manhattan='manhattan',Canberra='canberra',Binary='binary',Minkowski='minkowski'),selected = 'euclidean')),
+    column(width=6,selectizeInput("hclustFun_row", "Clustering linkage", c(Complete= "complete",Single= "single",Average= "average",Mcquitty= "mcquitty",Median= "median",Centroid= "centroid",Ward.D= "ward.D",Ward.D2= "ward.D2"),selected = 'complete')),
+    sliderInput("r", "Number of Clusters in Row", min = 1, max = 11, value = 2),    
+
+    h4('Column dendrogram'),
+    column(width=6,selectizeInput("distFun_col", "Distance", c(Euclidean="euclidean",Maximum='maximum',Manhattan='manhattan',Canberra='canberra',Binary='binary',Minkowski='minkowski'),selected = 'euclidean')),
+    column(width=6,selectizeInput("hclustFun_col", "Clustering linkage", c(Complete= "complete",Single= "single",Average= "average",Mcquitty= "mcquitty",Median= "median",Centroid= "centroid",Ward.D= "ward.D",Ward.D2= "ward.D2"),selected = 'complete')),
+    sliderInput("c", "Number of Clusters in Column", min = 1, max = 11, value = 2),
     
-    h4('Hierarchical clustering Method'),
-    column(width=6,selectizeInput("hclustFun_row", "Row", c(Complete= "complete",Single= "single",Average= "average",Mcquitty= "mcquitty",Median= "median",Centroid= "centroid",Ward.D= "ward.D",Ward.D2= "ward.D2"),selected = 'complete')),
-    column(width=6,selectizeInput("hclustFun_col", "Column", c(Complete= "complete",Single= "single",Average= "average",Mcquitty= "mcquitty",Median= "median",Centroid= "centroid",Ward.D= "ward.D",Ward.D2= "ward.D2"),selected = 'complete')),
-  
     hr(),  h4('Additional Parameters'),
     
     column(3,checkboxInput('showColor','Color')),
@@ -60,9 +62,7 @@ ui <- shinyUI(
              h4('Dendrogram Manipulation'),
              selectInput('dendrogram','Dendrogram Type',choices = c("both", "row", "column", "none"),selected = 'both'),
              selectizeInput("seriation", "Seriation", c(OLO="OLO",GW="GW",Mean="mean",None="none"),selected = 'OLO'),
-             sliderInput('branches_lwd','Dendrogram Branch Width',value = 0.6,min=0,max=5,step = 0.1),
-             sliderInput("r", "Number of Clusters in Row", min = 1, max = 11, value = 2),
-             sliderInput("c", "Number of Clusters in Column", min = 1, max = 11, value = 2)             
+             sliderInput('branches_lwd','Dendrogram Branch Width',value = 0.6,min=0,max=5,step = 0.1)
                      ),             
 
     conditionalPanel('input.showMargin==1',
