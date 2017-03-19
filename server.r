@@ -8,6 +8,7 @@ data.sel=eventReactive(input$data,{
   }
   data.in=as.data.frame(data.in)
   data.in=data.in[,sapply(data.in,function(x) class(x))=='numeric']
+  
   return(data.in)
 })  
 
@@ -32,8 +33,22 @@ output$colRng=renderUI({
   
 interactiveHeatmap<- reactive({
   data.in=data.sel()
-
-  if(input$f!='.') eval(parse(text=paste0('data.in=',input$f,'(data.in,use = "pairwise.complete.obs")')))
+  if(input$transpose) data.in=t(data.in)
+  if(input$f!='.'){
+    if(input$f=='sparse') data.in=na_mat(data.in,use = "pairwise.complete.obs")
+    if(input$f=='cor') data.in=cor(data.in,use = "pairwise.complete.obs")
+    if(input$f=='log') data.in=apply(data.in,2,function(x){
+      x[x<=0]=1
+      log(x) 
+    })
+    if(input$f=='sqrt') data.in=apply(data.in,2,sqrt)
+    if(input$f=='normalize') data.in=apply(data.in,2,function(x) (x-min(x,na.rm = T))/max(x,na.rm = T))
+    if(input$f=='scale') data.in=apply(data.in,2,function(x) (x-mean(x,na.rm = T))/var(x))
+    if(input$f=='percentize') data.in=apply(data.in,2,function(x){
+      f<-ecdf(x)
+      f(x)
+    })
+  } 
   if(!is.null(input$tables_true_search_columns)) 
     data.in=data.in[activeRows(input$tables_true_search_columns,data.in),]
   if(input$colRngAuto){
@@ -41,9 +56,25 @@ interactiveHeatmap<- reactive({
   }else{
     ColLimits=input$colorRng
   }
+  
+  distfun_row = function(x) dist(x, method = input$distFun_row)
+  distfun_col =  function(x) dist(x, method = input$distFun_col)
+  
+  hclustfun_row = function(x) hclust(x, method = input$hclustFun_row)
+  hclustfun_col = function(x) hclust(x, method = input$hclustFun_col)
+  
   heatmaply(data.in,
+            main = input$main,xlab = input$xlab,ylab = input$ylab,
+            row_text_angle = input$row_text_angle,
+            column_text_angle = input$column_text_angle,
+            dendrogram = input$dendrogram,
+            branches_lwd = input$branches_lwd,
             seriate = input$seration,
             colors=eval(parse(text=paste0(input$pal,'(',input$ncol,')'))),
+            distfun_row =  distfun_row,
+            hclustfun_row = hclustfun_row,
+            distfun_col = distfun_col,
+            hclustfun_col = hclustfun_col,
             k_col = input$c, 
             k_row = input$r,
             limits = ColLimits) %>% 
