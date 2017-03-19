@@ -8,7 +8,8 @@ ui <- shinyUI(
     uiOutput('data'),
     checkboxInput('showSample','Subset Data'),
     conditionalPanel('input.showSample',uiOutput('sample')),
-    br(),hr(),h4('Data Preprocessing'),
+    # br(),
+    hr(),h4('Data Preprocessing'),
     column(width=4,selectizeInput('transpose','Transpose',choices = c('No'=FALSE,'Yes'=TRUE),selected = FALSE)),
     column(width=4,selectizeInput("transform_fun", "Transform", c(Identity=".",Sqrt='sqrt',log='log',Scale='scale',Normalize='normalize',Percentize='percentize',"Missing values"='is.na10', Correlation='cor'),selected = '.')),
     uiOutput('annoVars'),
@@ -19,7 +20,7 @@ ui <- shinyUI(
     # sliderInput("r", "Number of Clusters in Row", min = 1, max = 10, value = 2),    
     column(width=4,numericInput("r", "Number of Clusters", min = 1, max = 20, value = 2, step = 1)),   
 
-    h4('Column dendrogram'),
+    hr(),h4('Column dendrogram'),
     column(width=4,selectizeInput("distFun_col", "Distance method", c(Euclidean="euclidean",Maximum='maximum',Manhattan='manhattan',Canberra='canberra',Binary='binary',Minkowski='minkowski'),selected = 'euclidean')),
     column(width=4,selectizeInput("hclustFun_col", "Clustering linkage", c(Complete= "complete",Single= "single",Average= "average",Mcquitty= "mcquitty",Median= "median",Centroid= "centroid",Ward.D= "ward.D",Ward.D2= "ward.D2"),selected = 'complete')),
     # sliderInput("c", "Number of Clusters in Column", min = 1, max = 10, value = 2),
