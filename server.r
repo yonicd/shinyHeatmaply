@@ -11,6 +11,28 @@ data.sel=eventReactive(input$data,{
   return(data.in)
 })  
 
+observeEvent(data.sel(),{
+  output$annoVars<-renderUI({
+    data.in=data.sel()
+    NM=NULL
+    
+    if(any(sapply(data.in,class)=='factor')){
+      NM=names(data.in)[which(sapply(data.in,class)=='factor')]  
+    } 
+    column(width=4,
+           selectizeInput('annoVar','Annotation',choices = names(data.in),selected=NM,multiple=T)
+    )
+  })
+  
+  output$sample<-renderUI({
+    list(
+      column(4,textInput(inputId = 'setSeed',label = 'Seed',value = sample(1:10000,1))),
+      column(4,numericInput(inputId = 'selRows',label = 'Number of Rows',min=1,max=nrow(data.sel()),value = nrow(data.sel()))),
+      column(4,selectizeInput('selCols','Columns Subset',choices = names(data.sel()),multiple=T))
+    )
+  })
+})
+
 output$data=renderUI({
   selData='mtcars'
   if(!is.null(input$mydata)){
@@ -18,14 +40,6 @@ output$data=renderUI({
     selData=tail(names(input$mydata),1)
   }
   selectInput("data","Select Data",d,selected = selData)
-})
-
-observeEvent(data.sel(),{
-  output$annoVars<-renderUI({
-    column(width=4,
-           selectizeInput('annoVar','Annotation',choices = names(data.sel()),multiple=T)
-    )
-  })
 })
 
 output$colRng=renderUI({
@@ -48,6 +62,13 @@ output$colRng=renderUI({
 
 interactiveHeatmap<- reactive({
   data.in=data.sel()
+  if(input$showSample){
+    if(!is.null(input$selRows)){
+        set.seed(input$setSeed)
+        if(length(input$selCols)==0) data.in=data.in[sample(1:nrow(data.in),input$selRows),]
+        if(length(input$selCols)>0) data.in=data.in[sample(1:nrow(data.in),input$selRows),input$selCols]
+    }
+  }
   ss_num = sapply(data.in,function(x) class(x)) %in% c('numeric','integer') # in order to only transform the numeric values
     
   if(input$transpose) data.in=t(data.in)
@@ -146,7 +167,7 @@ observeEvent({interactiveHeatmap()},{
   h<-interactiveHeatmap()
   output$downloadData <- downloadHandler(
     filename = function() {
-      paste("heatmaply-", Sys.Date(), ".html", sep="")
+      paste("heatmaply-", gsub(' ','_',Sys.time()), ".html", sep="")
     },
     content = function(file) {
       
@@ -154,6 +175,29 @@ observeEvent({interactiveHeatmap()},{
     }
   )
 })
+
+#Doesnt Work
+# observeEvent({interactiveHeatmap()},{
+#   h<-interactiveHeatmap()
+#   s1<-'<p><strong>This heatmap visualization was created using <a href="https://github.com/yonicd/shinyHeatmaply/">shinyHeatmaply</a>
+#   </strong></p></body>'
+#   tempF<-tempfile()
+#   htmlwidgets::saveWidget(h,tempF)
+#   tempLines=readLines(tempF)
+#   tempLines=gsub('</body>',s1,tempLines)
+#   
+#   output$downloadData <- downloadHandler(
+#     filename = function() {
+#       paste("heatmaply-", Sys.Date(), ".html", sep="")
+#     },
+#     content = function(file) {
+#       
+#       cat(tempLines,file = file,sep = '\n')      
+#       
+#     }
+#   )
+# })
+
 })
 
 
