@@ -48,31 +48,29 @@ output$colRng=renderUI({
 
 interactiveHeatmap<- reactive({
   data.in=data.sel()
+  ss_num = sapply(data.in,function(x) class(x)) %in% c('numeric','integer') # in order to only transform the numeric values
+    
   if(input$transpose) data.in=t(data.in)
-  if(input$f!='.'){
-    if(input$f=='is.na10') data.in=is.na10(data.in)
-    if(input$f=='cor'){
+  if(input$transform_fun!='.'){
+    if(input$transform_fun=='is.na10') data.in=is.na10(data.in)
+    if(input$transform_fun=='cor'){
       data.in=cor(data.in,use = "pairwise.complete.obs")
       updateSelectizeInput(session = session,inputId = 'pal',selected = "RdBu")
       updateNumericInput(session = session,inputId = 'colorRng_min',min=-1,max=1,value=-1)
       updateNumericInput(session = session,inputId = 'colorRng_max',min=-1,max=1,value=1)
-      updateCheckboxInput(session=session,inputId = 'colRngAuto',value = F)
+      updateCheckboxInput(session=session,inputId = 'colRngAuto',value = FALSE)
       
-      updateCheckboxInput(session=session,inputId = 'showColor',value = T)
-      updateCheckboxInput(session=session,inputId = 'colRngAuto',value = F)
+      updateCheckboxInput(session=session,inputId = 'showColor',value = TRUE)
+      updateCheckboxInput(session=session,inputId = 'colRngAuto',value = FALSE)
     }
-    if(input$f=='log') data.in=apply(data.in,2,function(x){
-      x[x<=0]=1
-      log(x) 
-    })
-    if(input$f=='sqrt') data.in=apply(data.in,2,sqrt)
-    if(input$f=='normalize') data.in=apply(data.in,2,function(x) (x-min(x,na.rm = T))/max(x,na.rm = T))
-    if(input$f=='scale') data.in=apply(data.in,2,function(x) (x-mean(x,na.rm = T))/var(x))
-    if(input$f=='percentize') data.in=apply(data.in,2,function(x){
-      f<-ecdf(x)
-      f(x)
-    })
+    if(input$transform_fun=='log') data.in[, ss_num]= apply(data.in[, ss_num],2,log)
+    if(input$transform_fun=='sqrt') data.in[, ss_num]= apply(data.in[, ss_num],2,sqrt) 
+    if(input$transform_fun=='normalize') data.in=normalize(data.in)
+    if(input$transform_fun=='scale') data.in[, ss_num] = scale(data.in[, ss_num])
+    if(input$transform_fun=='percentize') data.in=percentize(data.in)
   } 
+      
+      
   if(!is.null(input$tables_true_search_columns)) 
     data.in=data.in[activeRows(input$tables_true_search_columns,data.in),]
   if(input$colRngAuto){
