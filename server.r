@@ -43,7 +43,7 @@ interactiveHeatmap<- reactive({
   data.in=data.sel()
   if(input$transpose) data.in=t(data.in)
   if(input$f!='.'){
-    if(input$f=='sparse') data.in=na_mat(data.in,use = "pairwise.complete.obs")
+    if(input$f=='is.na10') data.in=is.na10(data.in)
     if(input$f=='cor') data.in=cor(data.in,use = "pairwise.complete.obs")
     if(input$f=='log') data.in=apply(data.in,2,function(x){
       x[x<=0]=1
