@@ -7,8 +7,8 @@ data.sel=eventReactive(input$data,{
     data.in=read.csv(text=input$mydata[[input$data]])
   }
   data.in=as.data.frame(data.in)
-  data.in=data.in[,sapply(data.in,function(x) class(x))=='numeric']
-  
+  data.in=data.in[,sapply(data.in,function(x) class(x))%in%c('numeric','integer')]
+
   return(data.in)
 })  
 
@@ -32,19 +32,22 @@ output$colRng=renderUI({
   min_range = rng[1]
   max_range = rng[2]
   a_good_step = 0.1 # (max_range-min_range) / n_data
-  numericInput("colorRng_min", "Set Color Range (min)", value = min_range, min = -Inf, max = min_range, step = a_good_step)  
-  numericInput("colorRng_max", "Set Color Range (max)", value = max_range, min = max_range, max = Inf, step = a_good_step)  
-  
-  output$colorRng = reactive({c(output$colorRng_min, output$colorRng_max)})
+  list(
+    numericInput("colorRng_min", "Set Color Range (min)", value = min_range, min = -Inf, max = min_range, step = a_good_step),
+    numericInput("colorRng_max", "Set Color Range (max)", value = max_range, min = max_range, max = Inf, step = a_good_step)
+  )  
 })
 
-  
+
 interactiveHeatmap<- reactive({
   data.in=data.sel()
   if(input$transpose) data.in=t(data.in)
   if(input$f!='.'){
     if(input$f=='is.na10') data.in=is.na10(data.in)
-    if(input$f=='cor') data.in=cor(data.in,use = "pairwise.complete.obs")
+    if(input$f=='cor'){
+      data.in=cor(data.in,use = "pairwise.complete.obs")
+      updateSelectizeInput(session = session,inputId = 'pal',selected = "RdBu")
+    }
     if(input$f=='log') data.in=apply(data.in,2,function(x){
       x[x<=0]=1
       log(x) 
@@ -62,7 +65,7 @@ interactiveHeatmap<- reactive({
   if(input$colRngAuto){
     ColLimits=NULL
   }else{
-    ColLimits=input$colorRng
+    ColLimits=c(input$colorRng_min, input$colorRng_max)
   }
   
   distfun_row = function(x) dist(x, method = input$distFun_row)
