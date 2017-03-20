@@ -206,7 +206,7 @@ output$tables=renderDataTable(data.sel(),server = T,filter='top',
 observeEvent({interactiveHeatmap()},{
   isolate({h<-interactiveHeatmap()})
   h$width='100%'
-  h$height='400px'
+  h$height='1000px'
   s<-tags$div(style="position: relative; bottom: 5px;",
               #tags$p(
                 tags$em('This heatmap visualization was created using',
