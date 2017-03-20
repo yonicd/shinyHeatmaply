@@ -107,14 +107,16 @@ interactiveHeatmap<- reactive({
         set.seed(input$setSeed)
       if((input$selRows >= 2) & (input$selRows < nrow(data.in))){
         # if input$selRows == nrow(data.in) then we should not do anything (this save refreshing when clicking the subset button)
-        if(length(input$selCols)<=1) data.in=data.in[sample(1:nrow(data.in),pmin(500,nrow(data.sel()))),]
-        if(length(input$selCols)>1) data.in=data.in[sample(1:nrow(data.in),pmin(500,nrow(data.sel()))),input$selCols]
+        if(length(input$selCols)<=1) data.in=data.in[sample(1:nrow(data.in),pmin(500,input$selRows)),]
+        if(length(input$selCols)>1) data.in=data.in[sample(1:nrow(data.in),pmin(500,input$selRows)),input$selCols]
       }
     }
   }
   # ss_num = sapply(data.in,function(x) class(x)) %in% c('numeric','integer') # in order to only transform the numeric values
   
-  if(length(input$annoVar)>0) data.in=data.in%>%mutate_each_(funs(factor),input$annoVar)
+  if(length(input$annoVar)>0){
+    if(all(input$annoVar%in%names(data.in))) data.in=data.in%>%mutate_each_(funs(factor),input$annoVar)
+  } 
   
   ss_num =  sapply(data.in, is.numeric) # in order to only transform the numeric values
     
