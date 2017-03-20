@@ -171,7 +171,8 @@ interactiveHeatmap<- reactive({
 observeEvent(input$data,{
 output$heatout <- renderPlotly({
   if(!is.null(input$data))
-    isolate({interactiveHeatmap()})
+    # isolate({interactiveHeatmap()})
+    interactiveHeatmap()
 })
 })
 
@@ -204,7 +205,8 @@ output$tables=renderDataTable(data.sel(),server = T,filter='top',
 
 #Clone Heatmap ----
 observeEvent({interactiveHeatmap()},{
-  isolate({h<-interactiveHeatmap()})
+  # isolate({h<-interactiveHeatmap()})
+  h<-interactiveHeatmap()
   h$width='100%'
   h$height='1000px'
   s<-tags$div(style="position: relative; bottom: 5px;",
