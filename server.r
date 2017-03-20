@@ -98,8 +98,10 @@ interactiveHeatmap<- reactive({
   if(input$showSample){
     if(!is.null(input$selRows)){
         set.seed(input$setSeed)
+      if(input$selRows>=2){
         if(length(input$selCols)<=1) data.in=data.in[sample(1:nrow(data.in),input$selRows),]
         if(length(input$selCols)>1) data.in=data.in[sample(1:nrow(data.in),input$selRows),input$selCols]
+      }
     }
   }
   # ss_num = sapply(data.in,function(x) class(x)) %in% c('numeric','integer') # in order to only transform the numeric values
@@ -181,7 +183,8 @@ observeEvent(input$mydata, {
 
 
 output$tables=renderDataTable(data.sel(),server = T,filter='top',
-                              extensions = c('Scroller','FixedHeader','FixedColumns','Buttons','ColReorder'), options = list(
+                              extensions = c('Scroller','FixedHeader','FixedColumns','Buttons','ColReorder'),
+                              options = list(
                                 dom = 't',
                                 buttons = c('copy', 'csv', 'excel', 'pdf', 'print','colvis'),
                                 colReorder = TRUE,
