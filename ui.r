@@ -2,7 +2,7 @@ ui <- shinyUI(
   fluidPage(
     tags$head(tags$link(rel="stylesheet", href="styles.css", type="text/css"),tags$script(src="getdata.js")),
   sidebarLayout(
-  sidebarPanel(
+  sidebarPanel(width=4,
     h2(id="data-title", "Drop Datasets"),
     div(class="col-xs-12", id="drop-area", ondragover="dragOver(event)",ondrop="dropData(event)"),
     uiOutput('data'),
@@ -67,7 +67,7 @@ ui <- shinyUI(
       tabPanel("Heatmaply",
                tags$a(id = 'downloadData', class = paste("btn btn-default shiny-download-link",'mybutton'), href = "", target = "_blank", download = NA, icon("clone"), 'Download Heatmap as HTML'),
                tags$head(tags$style(".mybutton{color:white;background-color:blue;} .skin-black .sidebar .mybutton{color: green;}") ),
-               plotlyOutput("heatout",height='600px')
+               plotlyOutput("heatout",height='800px')
                ),
       tabPanel("Data",
                dataTableOutput('tables')

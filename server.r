@@ -1,16 +1,6 @@
 server <- shinyServer(function(input, output,session) {	
 
-data.sel=eventReactive(input$data,{
-  if(input$data%in%d){
-    eval(parse(text=paste0('data.in=as.data.frame(datasets::',input$data,')')))
-    }else{
-    data.in=read.csv(text=input$mydata[[input$data]])
-  }
-  data.in=as.data.frame(data.in)
-  # data.in=data.in[,sapply(data.in,function(x) class(x))%in%c('numeric','integer')] # no need for this
-  return(data.in)
-})  
-
+#Annotation Variable UI ----
 observeEvent(data.sel(),{
   output$annoVars<-renderUI({
     data.in=data.sel()
@@ -23,7 +13,8 @@ observeEvent(data.sel(),{
            selectizeInput('annoVar','Annotation',choices = names(data.in),selected=NM,multiple=T)
     )
   })
-  
+
+#Sampling UI ----  
   output$sample<-renderUI({
     list(
       column(4,textInput(inputId = 'setSeed',label = 'Seed',value = sample(1:10000,1))),
@@ -33,6 +24,7 @@ observeEvent(data.sel(),{
   })
 })
 
+#Data Selection UI ----
 output$data=renderUI({
   selData='mtcars'
   if(!is.null(input$mydata)){
@@ -42,6 +34,8 @@ output$data=renderUI({
   selectInput("data","Select Data",d,selected = selData)
 })
 
+
+#Color Pallete UI ----
 output$colUI<-renderUI({
   colSel=ifelse(input$transform_fun=='cor','RdBu','Vidiris')
   selectizeInput(inputId ="pal", label ="Select Color Palette",
@@ -66,6 +60,7 @@ output$colUI<-renderUI({
                  selected=colSel)
 })
 
+#Manual Color Range UI ----
 output$colRng=renderUI({
   if(!is.null(data.sel())) {
     rng=range(data.sel(),na.rm = TRUE)
@@ -92,7 +87,19 @@ output$colRng=renderUI({
   
 })
 
+#Import/Select Data ----
+data.sel=eventReactive(input$data,{
+  if(input$data%in%d){
+    eval(parse(text=paste0('data.in=as.data.frame(datasets::',input$data,')')))
+  }else{
+    data.in=read.csv(text=input$mydata[[input$data]])
+  }
+  data.in=as.data.frame(data.in)
+  # data.in=data.in[,sapply(data.in,function(x) class(x))%in%c('numeric','integer')] # no need for this
+  return(data.in)
+})  
 
+#Building heatmaply ----
 interactiveHeatmap<- reactive({
   data.in=data.sel()
   if(input$showSample){
@@ -160,29 +167,27 @@ interactiveHeatmap<- reactive({
     
 })
 
-
+#Render Plot ----
 observeEvent(input$data,{
 output$heatout <- renderPlotly({
   if(!is.null(input$data))
-    interactiveHeatmap()
+    isolate({interactiveHeatmap()})
 })
 })
 
-observeEvent(input$mydata, {
-  len = length(input$mydata)
-  output$tables <- renderUI({
-    table_list <- lapply(1:len, function(i) {
-      tableName <- names(input$mydata)[[i]]
-      tableOutput(tableName)
-    })
-    do.call(tagList, table_list)
-  })
-  # for (name in names(input$mydata)) {
-  #   output[[name]] <- renderTable(read.csv(text=input$mydata[[name]]))
-  # }
-})
 
+# observeEvent(input$mydata, {
+#   len = length(input$mydata)
+#   output$tables <- renderUI({
+#     table_list <- lapply(1:len, function(i) {
+#       tableName <- names(input$mydata)[[i]]
+#       tableOutput(tableName)
+#     })
+#     do.call(tagList, table_list)
+#   })
+# })
 
+#Render Data Table ----
 output$tables=renderDataTable(data.sel(),server = T,filter='top',
                               extensions = c('Scroller','FixedHeader','FixedColumns','Buttons','ColReorder'),
                               options = list(
@@ -197,8 +202,11 @@ output$tables=renderDataTable(data.sel(),server = T,filter='top',
                                 scroller = TRUE
                               ))
 
+#Clone Heatmap ----
 observeEvent({interactiveHeatmap()},{
-  h<-interactiveHeatmap()
+  isolate({h<-interactiveHeatmap()})
+  h$width='100%'
+  h$height='1000px'
   s<-tags$div(style="position: absolute; bottom: 5px;",
               #tags$p(
                 tags$em('This heatmap visualization was created using',
@@ -224,7 +232,7 @@ observeEvent({interactiveHeatmap()},{
     }
   )
 })
-
+#End of Code ----
 })
 
 
