@@ -18,7 +18,7 @@ observeEvent(data.sel(),{
   output$sample<-renderUI({
     list(
       column(4,textInput(inputId = 'setSeed',label = 'Seed',value = sample(1:10000,1))),
-      column(4,numericInput(inputId = 'selRows',label = 'Number of Rows',min=1,max=nrow(data.sel()),value = nrow(data.sel()))),
+      column(4,numericInput(inputId = 'selRows',label = 'Number of Rows',min=1,max=pmin(500,nrow(data.sel())),value = pmin(500,nrow(data.sel())))),
       column(4,selectizeInput('selCols','Columns Subset',choices = names(data.sel()),multiple=T))
     )
   })
@@ -107,8 +107,8 @@ interactiveHeatmap<- reactive({
         set.seed(input$setSeed)
       if((input$selRows >= 2) & (input$selRows < nrow(data.in))){
         # if input$selRows == nrow(data.in) then we should not do anything (this save refreshing when clicking the subset button)
-        if(length(input$selCols)<=1) data.in=data.in[sample(1:nrow(data.in),input$selRows),]
-        if(length(input$selCols)>1) data.in=data.in[sample(1:nrow(data.in),input$selRows),input$selCols]
+        if(length(input$selCols)<=1) data.in=data.in[sample(1:nrow(data.in),pmin(500,nrow(data.sel()))),]
+        if(length(input$selCols)>1) data.in=data.in[sample(1:nrow(data.in),pmin(500,nrow(data.sel()))),input$selCols]
       }
     }
   }
@@ -206,7 +206,7 @@ output$tables=renderDataTable(data.sel(),server = T,filter='top',
 observeEvent({interactiveHeatmap()},{
   isolate({h<-interactiveHeatmap()})
   h$width='100%'
-  h$height='550px'
+  h$height='400px'
   s<-tags$div(style="position: absolute; bottom: 5px;",
               #tags$p(
                 tags$em('This heatmap visualization was created using',
