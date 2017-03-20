@@ -98,7 +98,8 @@ interactiveHeatmap<- reactive({
   if(input$showSample){
     if(!is.null(input$selRows)){
         set.seed(input$setSeed)
-      if(input$selRows>=2){
+      if((input$selRows >= 2) & (input$selRows < nrow(data.in))){
+        # if input$selRows == nrow(data.in) then we should not do anything (this save refreshing when clicking the subset button)
         if(length(input$selCols)<=1) data.in=data.in[sample(1:nrow(data.in),input$selRows),]
         if(length(input$selCols)>1) data.in=data.in[sample(1:nrow(data.in),input$selRows),input$selCols]
       }
