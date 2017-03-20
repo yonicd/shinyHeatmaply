@@ -207,7 +207,7 @@ observeEvent({interactiveHeatmap()},{
   isolate({h<-interactiveHeatmap()})
   h$width='100%'
   h$height='400px'
-  s<-tags$div(style="position: absolute; bottom: 5px;",
+  s<-tags$div(style="position: relative; bottom: 5px;",
               #tags$p(
                 tags$em('This heatmap visualization was created using',
                   tags$a(href="https://github.com/yonicd/shinyHeatmaply/",
