@@ -32,7 +32,7 @@ library(shiny)
 runGitHub("yonicd/shinyHeatmaply")
 ```
 
-<!----
+
 Run Gadget:
 
 ```
@@ -42,5 +42,5 @@ library(shiny)
 data(mtcars)
 launch_heatmaply()
 ```
----->
+
 
