@@ -39,8 +39,13 @@ Run Gadget:
 library(heatmaply)
 library(shiny)
 
+#single data.frame
 data(mtcars)
-launch_heatmaply()
+launch_heatmaply(mtcars)
+
+#list
+data(iris)
+launch_heatmaply(list('Example1'=mtcars,'Example2'=iris))
 ```
 
 
