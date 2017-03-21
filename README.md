@@ -6,7 +6,7 @@ Main difference between the Shiny application and the Shiny gadget:
 
   - The application has a import drag and drop interface as part of the application. Currently only csv files are supported.
 
-  - The gadget accepts arguments when called from the R console. The object defined as the input to the shinyHeatmaply gadget is a data.frame or a list of data.frames.
+  - The gadget is called from the R console and accepts input arguments. The object defined as the input to the shinyHeatmaply gadget is a data.frame or a list of data.frames.
 
 Installation:
 
