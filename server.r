@@ -214,21 +214,18 @@ observeEvent({interactiveHeatmap()},{
   #l=l[!l=='']
   l=data.frame(Parameter=names(l),Value=do.call('rbind',l),row.names = NULL,stringsAsFactors = F)
   l[which(l$Value==''),2]='NULL'
-  paramTbl=print(xtable::xtable(t(l)),type = 'html',include.colnames=FALSE,print.results = F)
+  paramTbl=print(xtable::xtable(t(l)),type = 'html',include.colnames=FALSE,print.results = F,html.table.attributes = c('border=1'))
   
   
   h$width='100%'
   h$height='800px'
   s<-tags$div(style="position: relative; bottom: 5px;",
-              #tags$p(
+              html2tagList(paramTbl),
                 tags$em('This heatmap visualization was created using',
                   tags$a(href="https://github.com/yonicd/shinyHeatmaply/",
                          target="_blank",'shinyHeatmaply')
                         )
-               # )
               )
-
-  sTbl<-tags$div(style="position: relative; bottom: 5px;",align='left',html2tagList(paramTbl))
   
   output$downloadData <- downloadHandler(
     filename = function() {
@@ -242,7 +239,14 @@ observeEvent({interactiveHeatmap()},{
           stop("Saving a widget with selfcontained = TRUE requires pandoc. For details see:\n", 
           "https://github.com/rstudio/rmarkdown/blob/master/PANDOC.md")
       }
+      
+      fileTemp<-readLines(file)
+      fileTemp=gsub('^(.*?)<','<',fileTemp)
+      fileTemp=fileTemp[grepl('<',fileTemp)]
+      cat(fileTemp,file=file)
+      
       htmlwidgets:::pandoc_self_contained_html(file, file)
+      
       unlink(libdir, recursive = TRUE)
     }
   )

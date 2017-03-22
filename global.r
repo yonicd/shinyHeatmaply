@@ -7,6 +7,7 @@ library(htmlwidgets)
 library(heatmaply)
 library(DT)
 library(jsonlite)
+library(xtable)
 library(dplyr)
 
 BrBG <- colorRampPalette(brewer.pal(11, "BrBG"))
