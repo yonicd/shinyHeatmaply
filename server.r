@@ -1,5 +1,4 @@
-server <- shinyServer(function(input, output,session) {	
-
+server <- shinyServer(function(input, output,session) {
 #Annotation Variable UI ----
 observeEvent(data.sel(),{
   output$annoVars<-renderUI({
@@ -173,22 +172,9 @@ interactiveHeatmap<- reactive({
 observeEvent(input$data,{
 output$heatout <- renderPlotly({
   if(!is.null(input$data))
-    # isolate({interactiveHeatmap()})
     interactiveHeatmap()
 })
 })
-
-
-# observeEvent(input$mydata, {
-#   len = length(input$mydata)
-#   output$tables <- renderUI({
-#     table_list <- lapply(1:len, function(i) {
-#       tableName <- names(input$mydata)[[i]]
-#       tableOutput(tableName)
-#     })
-#     do.call(tagList, table_list)
-#   })
-# })
 
 #Render Data Table ----
 output$tables=renderDataTable(data.sel(),server = T,filter='top',
@@ -207,11 +193,33 @@ output$tables=renderDataTable(data.sel(),server = T,filter='top',
 
 #Clone Heatmap ----
 observeEvent({interactiveHeatmap()},{
-  # isolate({h<-interactiveHeatmap()})
   h<-interactiveHeatmap()
+  
+  l<-list(main = input$main,xlab = input$xlab,ylab = input$ylab,
+          row_text_angle = input$row_text_angle,
+          column_text_angle = input$column_text_angle,
+          dendrogram = input$dendrogram,
+          branches_lwd = input$branches_lwd,
+          seriate = input$seriation,
+          colors=paste0(input$pal,'(',input$ncol,')'),
+          distfun_row =  input$distFun_row,
+          hclustfun_row = input$hclustFun_row,
+          distfun_col = input$distFun_col,
+          hclustfun_col = input$hclustFun_col,
+          k_col = input$c, 
+          k_row = input$r,
+          limits = paste(c(input$colorRng_min, input$colorRng_max),collapse=',')
+  )
+  
+  #l=l[!l=='']
+  l=data.frame(Parameter=names(l),Value=do.call('rbind',l),row.names = NULL,stringsAsFactors = F)
+  l[which(l$Value==''),2]='NULL'
+  paramTbl=print(xtable::xtable(t(l)),type = 'html',include.colnames=FALSE,print.results = F)
+  
+  
   h$width='100%'
   h$height='1000px'
-  s<-tags$div(style="position: relative; bottom: 5px;",
+  s<-tags$div(style="position: relative; bottom: 5px;",align='left',
               #tags$p(
                 tags$em('This heatmap visualization was created using',
                   tags$a(href="https://github.com/yonicd/shinyHeatmaply/",
@@ -219,6 +227,8 @@ observeEvent({interactiveHeatmap()},{
                         )
                # )
               )
+
+  sTbl<-tags$div(style="position: relative; bottom: 5px;",align='left',html2tagList(paramTbl))
   
   output$downloadData <- downloadHandler(
     filename = function() {
@@ -226,7 +236,8 @@ observeEvent({interactiveHeatmap()},{
     },
     content = function(file) {
       libdir <- paste(tools::file_path_sans_ext(basename(file)),"_files", sep = "")
-      htmltools::save_html(htmltools::browsable(htmltools::tagList(h, s)),file=file,libdir = libdir)
+
+      htmltools::save_html(htmltools::browsable(htmltools::tagList(h,s)),file=file,libdir = libdir)
       if (!htmlwidgets:::pandoc_available()) {
           stop("Saving a widget with selfcontained = TRUE requires pandoc. For details see:\n", 
           "https://github.com/rstudio/rmarkdown/blob/master/PANDOC.md")

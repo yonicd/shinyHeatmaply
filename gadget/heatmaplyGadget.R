@@ -68,7 +68,7 @@ viewer=paneViewer(minHeight = 1000)
             tabPanel("Heatmaply",
                      tags$a(id = 'downloadData', class = paste("btn btn-default shiny-download-link",'mybutton'), href = "", target = "_blank", download = NA, icon("clone"), 'Download Heatmap as HTML'),
                      tags$head(tags$style(".mybutton{color:white;background-color:blue;} .skin-black .sidebar .mybutton{color: green;}") ),
-                     plotlyOutput("heatout",height='600px')
+                     plotlyOutput("heatout",height='800px')
             ),
             tabPanel("Data",
                      dataTableOutput('tables')
@@ -92,22 +92,24 @@ viewer=paneViewer(minHeight = 1000)
       as.data.frame(obj[[input$data]])
     })  
     
-    observeEvent({data.sel()},{
+    observeEvent(data.sel(),{
       output$annoVars<-renderUI({
         data.in=data.sel()
         NM=NULL
+        
         if(any(sapply(data.in,class)=='factor')){
           NM=names(data.in)[which(sapply(data.in,class)=='factor')]  
         } 
         column(width=4,
-               selectizeInput('annoVar','Annotation',choices = names(data.in),multiple=T)
+               selectizeInput('annoVar','Annotation',choices = names(data.in),selected=NM,multiple=T)
         )
       })
       
+      #Sampling UI ----  
       output$sample<-renderUI({
         list(
           column(4,textInput(inputId = 'setSeed',label = 'Seed',value = sample(1:10000,1))),
-          column(4,numericInput(inputId = 'selRows',label = 'Number of Rows',min=1,max=nrow(data.sel()),value = nrow(data.sel()))),
+          column(4,numericInput(inputId = 'selRows',label = 'Number of Rows',min=1,max=pmin(500,nrow(data.sel())),value = pmin(500,nrow(data.sel())))),
           column(4,selectizeInput('selCols','Columns Subset',choices = names(data.sel()),multiple=T))
         )
       })
@@ -168,15 +170,17 @@ viewer=paneViewer(minHeight = 1000)
       if(input$showSample){
         if(!is.null(input$selRows)){
           set.seed(input$setSeed)
-          if(input$selRows>=2){
-          if(length(input$selCols)<=1) data.in=data.in[sample(1:nrow(data.in),input$selRows),]
-          if(length(input$selCols)>1) data.in=data.in[sample(1:nrow(data.in),input$selRows),input$selCols]
+          if((input$selRows >= 2) & (input$selRows < nrow(data.in))){
+            # if input$selRows == nrow(data.in) then we should not do anything (this save refreshing when clicking the subset button)
+            if(length(input$selCols)<=1) data.in=data.in[sample(1:nrow(data.in),pmin(500,input$selRows)),]
+            if(length(input$selCols)>1) data.in=data.in[sample(1:nrow(data.in),pmin(500,input$selRows)),input$selCols]
           }
         }
       }
-      # ss_num = sapply(data.in,function(x) class(x)) %in% c('numeric','integer') # in order to only transform the numeric values
       
-      if(length(input$annoVar)>0) data.in=data.in%>%mutate_each_(funs(factor),input$annoVar)
+      if(length(input$annoVar)>0){
+        if(all(input$annoVar%in%names(data.in))) data.in=data.in%>%mutate_each_(funs(factor),input$annoVar)
+      } 
       
       ss_num =  sapply(data.in, is.numeric) # in order to only transform the numeric values
       
@@ -251,7 +255,9 @@ viewer=paneViewer(minHeight = 1000)
     
     observeEvent({interactiveHeatmap()},{
       h<-interactiveHeatmap()
-      s<-tags$div(style="position: absolute; bottom: 5px;",
+      h$width='100%'
+      h$height='1000px'
+      s<-tags$div(style="position: relative; bottom: 5px;",
                   #tags$p(
                   tags$em('This heatmap visualization was created using',
                           tags$a(href="https://github.com/yonicd/shinyHeatmaply/",
