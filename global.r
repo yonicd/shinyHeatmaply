@@ -23,7 +23,7 @@ na_mat <- function(x,...) {
 
 d=data(package='datasets')$results[,'Item']
 d=d[!grepl('[\\()]',d)]
-d=d[!d%in%c('UScitiesD','eurodist','sleep')]
+d=d[!d%in%c('UScitiesD','eurodist','sleep','warpbreaks')]
 d=d[unlist(lapply(d,function(d.in) eval(parse(text=paste0('ncol(as.data.frame(datasets::',d.in,'))')))))>1]
 
 source('https://raw.githubusercontent.com/yonicd/shinyHeatmaply/master/inst/html2tagList.R')

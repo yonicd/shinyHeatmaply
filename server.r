@@ -218,8 +218,8 @@ observeEvent({interactiveHeatmap()},{
   
   
   h$width='100%'
-  h$height='1000px'
-  s<-tags$div(style="position: relative; bottom: 5px;",align='left',
+  h$height='800px'
+  s<-tags$div(style="position: relative; bottom: 5px;",
               #tags$p(
                 tags$em('This heatmap visualization was created using',
                   tags$a(href="https://github.com/yonicd/shinyHeatmaply/",
