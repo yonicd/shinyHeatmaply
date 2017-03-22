@@ -210,7 +210,7 @@ observeEvent({interactiveHeatmap()},{
   # isolate({h<-interactiveHeatmap()})
   h<-interactiveHeatmap()
   h$width='100%'
-  h$height='1000px'
+  h$height='600px'
   s<-tags$div(style="position: relative; bottom: 5px;",
               #tags$p(
                 tags$em('This heatmap visualization was created using',
