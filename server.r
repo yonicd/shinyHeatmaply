@@ -214,7 +214,7 @@ observeEvent({interactiveHeatmap()},{
   #l=l[!l=='']
   l=data.frame(Parameter=names(l),Value=do.call('rbind',l),row.names = NULL,stringsAsFactors = F)
   l[which(l$Value==''),2]='NULL'
-  paramTbl=print(xtable::xtable(t(l)),type = 'html',include.colnames=FALSE,print.results = F,html.table.attributes = c('border=1'))
+  paramTbl=print(xtable::xtable(l),type = 'html',include.rownames=FALSE,print.results = F,html.table.attributes = c('border=0'))
   
   
   h$width='100%'
@@ -241,9 +241,12 @@ observeEvent({interactiveHeatmap()},{
       }
       
       fileTemp<-readLines(file)
-      fileTemp=gsub('^(.*?)<','<',fileTemp)
-      fileTemp=fileTemp[grepl('<',fileTemp)]
-      cat(fileTemp,file=file)
+      tblTempIdx=grep('table',fileTemp)
+      tblTempVal=fileTemp[tblTempIdx[1]:tblTempIdx[2]]
+      tblTempVal=gsub('^\\s+','',tblTempVal)
+      fileTemp[tblTempIdx[1]:tblTempIdx[2]]=tblTempVal
+      fileTemp=fileTemp[!nchar(fileTemp)==0]
+      cat(HTML(fileTemp),file=file)
       
       htmlwidgets:::pandoc_self_contained_html(file, file)
       
