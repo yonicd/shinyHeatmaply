@@ -253,17 +253,40 @@ viewer=paneViewer(minHeight = 1000)
                                     scroller = TRUE
                                   ))
     
+    #Clone Heatmap ----
     observeEvent({interactiveHeatmap()},{
       h<-interactiveHeatmap()
+      
+      l<-list(main = input$main,xlab = input$xlab,ylab = input$ylab,
+              row_text_angle = input$row_text_angle,
+              column_text_angle = input$column_text_angle,
+              dendrogram = input$dendrogram,
+              branches_lwd = input$branches_lwd,
+              seriate = input$seriation,
+              colors=paste0(input$pal,'(',input$ncol,')'),
+              distfun_row =  input$distFun_row,
+              hclustfun_row = input$hclustFun_row,
+              distfun_col = input$distFun_col,
+              hclustfun_col = input$hclustFun_col,
+              k_col = input$c, 
+              k_row = input$r,
+              limits = paste(c(input$colorRng_min, input$colorRng_max),collapse=',')
+      )
+      
+      #l=l[!l=='']
+      l=data.frame(Parameter=names(l),Value=do.call('rbind',l),row.names = NULL,stringsAsFactors = F)
+      l[which(l$Value==''),2]='NULL'
+      paramTbl=print(xtable::xtable(l),type = 'html',include.rownames=FALSE,print.results = F,html.table.attributes = c('border=0'))
+      
+      
       h$width='100%'
-      h$height='1000px'
+      h$height='800px'
       s<-tags$div(style="position: relative; bottom: 5px;",
-                  #tags$p(
+                  html2tagList(paramTbl),
                   tags$em('This heatmap visualization was created using',
                           tags$a(href="https://github.com/yonicd/shinyHeatmaply/",
                                  target="_blank",'shinyHeatmaply')
                   )
-                  # )
       )
       
       output$downloadData <- downloadHandler(
@@ -272,12 +295,23 @@ viewer=paneViewer(minHeight = 1000)
         },
         content = function(file) {
           libdir <- paste(tools::file_path_sans_ext(basename(file)),"_files", sep = "")
-          htmltools::save_html(htmltools::browsable(htmltools::tagList(h, s)),file=file,libdir = libdir)
+          
+          htmltools::save_html(htmltools::browsable(htmltools::tagList(h,s)),file=file,libdir = libdir)
           if (!htmlwidgets:::pandoc_available()) {
             stop("Saving a widget with selfcontained = TRUE requires pandoc. For details see:\n", 
                  "https://github.com/rstudio/rmarkdown/blob/master/PANDOC.md")
           }
+          
+          fileTemp<-readLines(file)
+          tblTempIdx=grep('table',fileTemp)
+          tblTempVal=fileTemp[tblTempIdx[1]:tblTempIdx[2]]
+          tblTempVal=gsub('^\\s+','',tblTempVal)
+          fileTemp[tblTempIdx[1]:tblTempIdx[2]]=tblTempVal
+          fileTemp=fileTemp[!nchar(fileTemp)==0]
+          cat(HTML(fileTemp),file=file)
+          
           htmlwidgets:::pandoc_self_contained_html(file, file)
+          
           unlink(libdir, recursive = TRUE)
         }
       )

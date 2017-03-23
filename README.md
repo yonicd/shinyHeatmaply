@@ -11,24 +11,12 @@ Main difference between the Shiny application and the Shiny gadget:
 Installation:
 
 ```r
-
-install.packages("shiny") 
-install.packages("htmlwidgets")
-install.packages("jsonlite")
-install.packages("dplyr")
-install.packages("ggplot2")    
-install.packages("dendextend")    
-install.packages("plotly")    
-install.packages("devtools")    
-install.packages("heatmaply")
-# devtools::install_github('talgalili/heatmaply')
-install.packages("DT")    
-
+devtools::install_github('yonicd/shinyHeatmaply')
 ```
+
 Run Application:
 
 ```
-library(shiny)    
 runGitHub("yonicd/shinyHeatmaply")
 ```
 
@@ -36,8 +24,7 @@ runGitHub("yonicd/shinyHeatmaply")
 Run Gadget:
 
 ```
-library(heatmaply)
-library(shiny)
+library(shinyHeatmaply)
 
 #single data.frame
 data(mtcars)

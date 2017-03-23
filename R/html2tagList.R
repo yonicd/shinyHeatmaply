@@ -1,8 +1,7 @@
 #'@title html2tagList
-#'@description convert raw html to htmltools tagList
+#'@description convert raw html to tagList
 #'@param x character vector of html
 #'@examples 
-#'
 #'x<-'<h1>Title</h1>
 #'    <h2>Header text</h2>
 #'    <p>Text here</p>
@@ -19,7 +18,7 @@
 #'class(tagL)
 #'tagL
 #'if(interactive()) htmltools::browsable(tagL)
-#'
+#'@export
 html2tagList<-function(x){
   
   x<-strsplit(gsub('>','>_AAA_',x),'_AAA_')[[1]]
