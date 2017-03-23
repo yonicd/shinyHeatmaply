@@ -5,7 +5,7 @@ Shiny application and Shiny gadget for the [heatmaply](https://github.com/talgal
 Main difference between the Shiny application and the Shiny gadget:
 
   - The application has an import interface as part of the application.
-    - Currently: csv,txt,tab,xls,xlsx,rda files are supported.
+    - Currently: csv,txt,tab,xls,xlsx,rd,rda files are supported.
 
   - The gadget is called from the R console and accepts input arguments. The object defined as the input to the shinyHeatmaply gadget is a data.frame or a list of data.frames.
 
