@@ -3,6 +3,5 @@
 export(BrBG)
 export(Spectral)
 export(class_to)
-export(html2tagList)
 export(launch_heatmaply)
 export(na_mat)

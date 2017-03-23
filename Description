@@ -26,4 +26,4 @@ BugReports: https://github.com/yonicd/shinyHeatmaply/issues
 LazyData: true
 NeedsCompilation: no
 Packaged: 2017-01-31 14:00:00 UTC; Yoni
-RoxygenNote: 6.0.1
+RoxygenNote: 5.0.1

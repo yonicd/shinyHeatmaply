@@ -1,5 +1,13 @@
-heatmaplyGadget<-function(obj,minHeight = 1000,...){
-viewer=paneViewer(minHeight = 1000)
+heatmaplyGadget<-function(obj,plotHeight=800,viewerType='paneViewer',...){
+viewerDots<-list(...) 
+
+if(viewerType=='dialogViewer'){
+  if(is.null(viewerDots$dialogName)) viewerDots$dialogName='shinyHeatmaply'
+  if(is.null(viewerDots$width)) viewerDots$width=1600
+  if(is.null(viewerDots$height)) viewerDots$height=1000
+} 
+
+viewer<-do.call(viewerType,viewerDots)
 #UI----
   ui <- shinyUI(
     fluidPage(
@@ -68,7 +76,7 @@ viewer=paneViewer(minHeight = 1000)
             tabPanel("Heatmaply",
                      tags$a(id = 'downloadData', class = paste("btn btn-default shiny-download-link",'mybutton'), href = "", target = "_blank", download = NA, icon("clone"), 'Download Heatmap as HTML'),
                      tags$head(tags$style(".mybutton{color:white;background-color:blue;} .skin-black .sidebar .mybutton{color: green;}") ),
-                     plotlyOutput("heatout",height='800px')
+                     plotlyOutput("heatout",height=paste0(plotHeight,'px'))
             ),
             tabPanel("Data",
                      dataTableOutput('tables')
@@ -284,8 +292,8 @@ viewer=paneViewer(minHeight = 1000)
       s<-tags$div(style="position: relative; bottom: 5px;",
                   HTML(paramTbl),
                   tags$em('This heatmap visualization was created using',
-                          tags$a(href="https://github.com/yonicd/shinyHeatmaply/",
-                                 target="_blank",'shinyHeatmaply')
+                          tags$a(href="https://github.com/yonicd/shinyHeatmaply/",target="_blank",'shinyHeatmaply'),
+                          Sys.time()
                   )
       )
       

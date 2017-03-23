@@ -18,7 +18,6 @@
 #'class(tagL)
 #'tagL
 #'if(interactive()) htmltools::browsable(tagL)
-#'@export
 html2tagList<-function(x){
   
   x<-strsplit(gsub('>','>_AAA_',x),'_AAA_')[[1]]

@@ -228,8 +228,8 @@ observeEvent({interactiveHeatmap()},{
   s<-tags$div(style="position: relative; bottom: 5px;",
               HTML(paramTbl),
                 tags$em('This heatmap visualization was created using',
-                  tags$a(href="https://github.com/yonicd/shinyHeatmaply/",
-                         target="_blank",'shinyHeatmaply')
+                  tags$a(href="https://github.com/yonicd/shinyHeatmaply/",target="_blank",'shinyHeatmaply'),
+                  Sys.time()
                         )
               )
   

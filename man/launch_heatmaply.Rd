@@ -4,12 +4,14 @@
 \alias{launch_heatmaply}
 \title{launch_heatmaply}
 \usage{
-launch_heatmaply(obj, minHeight = 1000)
+launch_heatmaply(obj, plotHeight = 800, viewerType = "paneViewer")
 }
 \arguments{
 \item{obj}{data.frame or list of data.frames}
 
-\item{minHeight}{numeric that gets passed to paneViewer}
+\item{plotHeight}{numeric that sets the height of the plot output (default 800px)}
+
+\item{viewerType}{character of the viewer to be used to launch the app to c('paneViewer','dialogViewer','browserViewer')}
 }
 \description{
 launch shiny app UI for heatmaply from R console
@@ -23,3 +25,4 @@ data(iris)
 launch_heatmaply(list('Example1'=mtcars,'Example2'=iris))
 }
 }
+
