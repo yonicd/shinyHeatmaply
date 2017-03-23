@@ -4,8 +4,8 @@ Title: Deploy heatmaply using shiny
 Version: 0.0.1
 Date: 2017-03-20
 Authors@R: c(
-              person(given = 'Tal',family = 'Galili',email = 'tal.galili@metrumrg.com',role = c('aut')),
-              person(given = 'Jonathan',family = 'Sidi',email = 'yonicd@gmail.com',role = c('aut','cre'))
+              person(given = 'Jonathan',family = 'Sidi',email = 'yonicd@gmail.com',role = c('aut','cre')),
+              person(given = 'Tal',family = 'Galili',email = 'tal.galili@metrumrg.com',role = c('aut'))
               )
 Maintainer: Jonathan Sidi <yonicd@gmail.com>
 Description: Access functionality of the heatmaply package through Shiny UI.

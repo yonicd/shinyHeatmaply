@@ -226,7 +226,7 @@ observeEvent({interactiveHeatmap()},{
   h$width='100%'
   h$height='800px'
   s<-tags$div(style="position: relative; bottom: 5px;",
-              html2tagList(paramTbl),
+              HTML(paramTbl),
                 tags$em('This heatmap visualization was created using',
                   tags$a(href="https://github.com/yonicd/shinyHeatmaply/",
                          target="_blank",'shinyHeatmaply')
@@ -245,14 +245,6 @@ observeEvent({interactiveHeatmap()},{
           stop("Saving a widget with selfcontained = TRUE requires pandoc. For details see:\n", 
           "https://github.com/rstudio/rmarkdown/blob/master/PANDOC.md")
       }
-      
-      fileTemp<-readLines(file)
-      tblTempIdx=grep('table',fileTemp)
-      tblTempVal=fileTemp[tblTempIdx[1]:tblTempIdx[2]]
-      tblTempVal=gsub('^\\s+','',tblTempVal)
-      fileTemp[tblTempIdx[1]:tblTempIdx[2]]=tblTempVal
-      fileTemp=fileTemp[!nchar(fileTemp)==0]
-      cat(HTML(fileTemp),file=file)
       
       htmlwidgets:::pandoc_self_contained_html(file, file)
       
