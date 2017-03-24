@@ -3,8 +3,12 @@ d=data(package='datasets')$results[,'Item']
 d=d[!grepl('[\\()]',d)]
 d=d[!d%in%c('UScitiesD','eurodist','sleep','warpbreaks')]
 d=d[unlist(lapply(d,function(d.in) eval(parse(text=paste0('ncol(as.data.frame(datasets::',d.in,'))')))))>1]
+d=d[-which(d=='mtcars')]
+d=c('mtcars',d)
 
 server <- shinyServer(function(input, output,session) {
+  TEMPLIST<-new.env()
+  TEMPLIST$d<-d
 #Annotation Variable UI ----
 observeEvent(data.sel(),{
   output$annoVars<-renderUI({
@@ -31,12 +35,9 @@ observeEvent(data.sel(),{
 
 #Data Selection UI ----
 output$data=renderUI({
-  selData='mtcars'
-  if(!is.null(input$mydata)){
-    d=c(input$mydata$name,d) 
-    selData=input$mydata$name
-  }
-  selectInput("data","Select Data",d,selected = selData)
+  if(!is.null(input$mydata)) TEMPLIST$d=c(input$mydata$name,TEMPLIST$d)
+  selData=head(TEMPLIST$d,1)
+  selectInput("data","Select Data",TEMPLIST$d,selected = selData)
 })
 
 
