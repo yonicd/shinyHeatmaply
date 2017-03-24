@@ -3,5 +3,6 @@
 export(BrBG)
 export(Spectral)
 export(class_to)
+export(importSwitch)
 export(launch_heatmaply)
 export(na_mat)

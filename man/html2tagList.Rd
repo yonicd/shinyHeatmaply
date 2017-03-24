@@ -30,4 +30,3 @@ class(tagL)
 tagL
 if(interactive()) htmltools::browsable(tagL)
 }
-

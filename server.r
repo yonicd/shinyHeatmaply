@@ -33,8 +33,8 @@ observeEvent(data.sel(),{
 output$data=renderUI({
   selData='mtcars'
   if(!is.null(input$mydata)){
-    d=c(names(input$mydata),d) 
-    selData=tail(names(input$mydata),1)
+    d=c(input$mydata$name,d) 
+    selData=input$mydata$name
   }
   selectInput("data","Select Data",d,selected = selData)
 })
@@ -97,7 +97,7 @@ data.sel=eventReactive(input$data,{
   if(input$data%in%d){
     eval(parse(text=paste0('data.in=as.data.frame(datasets::',input$data,')')))
   }else{
-    data.in=read.csv(text=input$mydata[[input$data]])
+    data.in=importSwitch(input$mydata[input$mydata$name%in%input$data,])
   }
   data.in=as.data.frame(data.in)
   # data.in=data.in[,sapply(data.in,function(x) class(x))%in%c('numeric','integer')] # no need for this
