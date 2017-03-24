@@ -1,6 +1,6 @@
 ui <- shinyUI(
   fluidPage(
-    tags$head(tags$link(rel="stylesheet", href="styles.css", type="text/css"),tags$script(src="getdata.js")),
+  #tags$head(tags$link(rel="stylesheet", href="styles.css", type="text/css"),tags$script(src="getdata.js")),
   sidebarLayout(
   sidebarPanel(width=4,
     # h2(id="data-title", "Drop Datasets"),
@@ -8,11 +8,11 @@ ui <- shinyUI(
     #     id="drop-area", 
     #     ondragover="dragOver(event)",
     #     ondrop="dropData(event)"),
+    h4('Data Selection'),
     fileInput(inputId="mydata", label = "Import Data",multiple = T),
     uiOutput('data'),
     checkboxInput('showSample','Subset Data'),
     conditionalPanel('input.showSample',uiOutput('sample')),
-    # br(),
     hr(),h4('Data Preprocessing'),
     column(width=4,selectizeInput('transpose','Transpose',choices = c('No'=FALSE,'Yes'=TRUE),selected = FALSE)),
     column(width=4,selectizeInput("transform_fun", "Transform", c(Identity=".",Sqrt='sqrt',log='log',Scale='scale',Normalize='normalize',Percentize='percentize',"Missing values"='is.na10', Correlation='cor'),selected = '.')),
