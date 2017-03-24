@@ -19,7 +19,7 @@ observeEvent(data.sel(),{
       NM=names(data.in)[which(sapply(data.in,class)=='factor')]  
     } 
     column(width=4,
-           selectizeInput('annoVar','Annotation',choices = names(data.in),selected=NM,multiple=T)
+           selectizeInput('annoVar','Annotation',choices = names(data.in),selected=NM,multiple=T,options = list(placeholder = 'select columns',plugins = list("remove_button")))
     )
   })
 

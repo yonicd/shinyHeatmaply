@@ -25,3 +25,4 @@ data(iris)
 launch_heatmaply(list('Example1'=mtcars,'Example2'=iris))
 }
 }
+
