@@ -1,6 +1,6 @@
 Package: shinyHeatmaply
 Type: Package
-Title: Deploy 'heatmaply' using shiny
+Title: Deploy 'heatmaply' using 'shiny'
 Version: 0.0.1
 Date: 2017-03-20
 Authors@R: c(
