@@ -17,12 +17,14 @@ launch_heatmaply(obj, plotHeight = 800, viewerType = "paneViewer")
 launch shiny app UI for heatmaply from R console
 }
 \examples{
+\dontrun{
 if(interactive()){
 data(mtcars)
 launch_heatmaply(mtcars)
 
 data(iris)
 launch_heatmaply(list('Example1'=mtcars,'Example2'=iris))
+}
 }
 }
 
