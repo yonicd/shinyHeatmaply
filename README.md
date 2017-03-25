@@ -18,6 +18,8 @@ devtools::install_github('yonicd/shinyHeatmaply')
 Run Application:
 
 ```
+library(ploly)
+library(shiny)
 runGitHub("yonicd/shinyHeatmaply")
 ```
 
