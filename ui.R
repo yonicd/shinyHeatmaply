@@ -71,7 +71,7 @@ ui <- shinyUI(
       tabPanel("Heatmaply",
                tags$a(id = 'downloadData', class = paste("btn btn-default shiny-download-link",'mybutton'), href = "", target = "_blank", download = NA, icon("clone"), 'Download Heatmap as HTML'),
                tags$head(tags$style(".mybutton{color:white;background-color:blue;} .skin-black .sidebar .mybutton{color: green;}") ),
-               plotlyOutput("heatout",height='800px')
+               plotlyOutput("heatout",height='600px')
                ),
       tabPanel("Data",
                dataTableOutput('tables')
