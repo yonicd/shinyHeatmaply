@@ -1,4 +1,3 @@
-#'@importFrom graphics layout
 #'@importFrom stats cor dist hclust
 heatmaplyGadget<-function(obj,plotHeight=800,viewerType='paneViewer',...){
 viewerDots<-list(...) 
@@ -239,7 +238,7 @@ viewer<-do.call(viewerType,viewerDots)
                 k_col = input$c, 
                 k_row = input$r,
                 limits = ColLimits) %>% 
-        layout(margin = list(l = input$l, b = input$b))
+        plotly::layout(margin = list(l = input$l, b = input$b))
       
     })
     
