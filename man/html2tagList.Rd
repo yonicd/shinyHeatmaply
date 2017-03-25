@@ -31,9 +31,5 @@ class(tagL)
 tagL
 if(interactive()) htmltools::browsable(tagL)
 }
-<<<<<<< HEAD
 }
 \keyword{internal}
-=======
-
->>>>>>> 179ccf6d72291256d33023c51c2e6df691106732
