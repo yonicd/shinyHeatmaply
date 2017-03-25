@@ -1,4 +1,10 @@
+#'@title importSwitch
+#'@description utility function to read imported data
+#'@param file path to imported file
+#'@return data.frame
 #'@export
+#'@importFrom utils read.delim
+#'@keywords internal
 importSwitch=function(file){
   type=tolower(gsub('^(.*?)\\.','',file$name))
   

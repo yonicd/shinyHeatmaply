@@ -13,6 +13,7 @@ html2tagList(x)
 convert raw html to tagList
 }
 \examples{
+\donttest{
 x<-'<h1>Title</h1>
    <h2>Header text</h2>
    <p>Text here</p>
@@ -30,3 +31,5 @@ class(tagL)
 tagL
 if(interactive()) htmltools::browsable(tagL)
 }
+}
+\keyword{internal}
