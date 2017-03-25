@@ -1,6 +1,6 @@
 Package: shinyHeatmaply
 Type: Package
-Title: Deploy heatmaply using shiny
+Title: Deploy 'heatmaply' using 'shiny'
 Version: 0.0.1
 Date: 2017-03-20
 Authors@R: c(
@@ -8,7 +8,7 @@ Authors@R: c(
               person(given = 'Tal',family = 'Galili',email = 'tal.galili@metrumrg.com',role = c('aut'))
               )
 Maintainer: Jonathan Sidi <yonicd@gmail.com>
-Description: Access functionality of the heatmaply package through Shiny UI.
+Description: Access functionality of the 'heatmaply' package through 'Shiny UI'.
 Depends:
     R (>= 2.3.0),
     graphics,
@@ -28,6 +28,7 @@ License:  GPL-2 | GPL-3
 URL: https://github.com/yonicd/shinyHeatmaply
 BugReports: https://github.com/yonicd/shinyHeatmaply/issues
 LazyData: true
+License: GPL-2 | GPL-3
 NeedsCompilation: no
 Packaged: 2017-01-31 14:00:00 UTC; Yoni
-RoxygenNote: 6.0.1
+RoxygenNote: 5.0.1
