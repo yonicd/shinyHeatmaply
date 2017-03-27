@@ -305,12 +305,14 @@ viewer<-do.call(viewerType,viewerDots)
           libdir <- paste(tools::file_path_sans_ext(basename(file)),"_files", sep = "")
           
           htmltools::save_html(htmltools::browsable(htmltools::tagList(h,s)),file=file,libdir = libdir)
-          if (!htmlwidgets:::pandoc_available()) {
+          # if (!htmlwidgets:::pandoc_available()) {
+          if (!pandoc_available()) {
             stop("Saving a widget with selfcontained = TRUE requires pandoc. For details see:\n", 
                  "https://github.com/rstudio/rmarkdown/blob/master/PANDOC.md")
           }
           
-          htmlwidgets:::pandoc_self_contained_html(file, file)
+          # htmlwidgets:::pandoc_self_contained_html(file, file)
+          pandoc_self_contained_html(file, file)
           unlink(libdir, recursive = TRUE)
         }
       )
