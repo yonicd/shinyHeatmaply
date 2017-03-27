@@ -1,13 +1,7 @@
 ui <- shinyUI(
   fluidPage(
-  #tags$head(tags$link(rel="stylesheet", href="styles.css", type="text/css"),tags$script(src="getdata.js")),
   sidebarLayout(
   sidebarPanel(width=4,
-    # h2(id="data-title", "Drop Datasets"),
-    # div(class="col-xs-12", 
-    #     id="drop-area", 
-    #     ondragover="dragOver(event)",
-    #     ondrop="dropData(event)"),
     h4('Data Selection'),
     fileInput(inputId="mydata", label = "Import Data",multiple = T),
     uiOutput('data'),
@@ -74,7 +68,7 @@ ui <- shinyUI(
                plotlyOutput("heatout",height='600px')
                ),
       tabPanel("Data",
-               dataTableOutput('tables')
+               DT::dataTableOutput('tables')
                )
     ) 
   )

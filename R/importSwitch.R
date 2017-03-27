@@ -3,7 +3,6 @@
 #'@param file path to imported file
 #'@return data.frame
 #'@export
-#'@importFrom utils read.delim
 #'@keywords internal
 importSwitch=function(file){
   type=tolower(gsub('^(.*?)\\.','',file$name))
@@ -14,7 +13,7 @@ importSwitch=function(file){
       txt='\n',
       tab='\t'
     )
-    out=read.delim(file = file$datapath,stringsAsFactors = F,sep=sep)
+    out=utils::read.delim(file = file$datapath,stringsAsFactors = F,sep=sep)
   }
   
   if(type%in%c('rda','rd')){
@@ -22,7 +21,7 @@ importSwitch=function(file){
     eval(parse(text=paste0('out=',ls(pattern = '[^type|^file]'))))
   }
   
-  if(type%in%c('xls','xlsx')) out=read_excel(path=file$datapath)
+  if(type%in%c('xls','xlsx')) out=readxl::read_excel(path=file$datapath)
   return(out)
   
 }

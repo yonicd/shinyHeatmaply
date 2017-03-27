@@ -11,19 +11,20 @@ Maintainer: Jonathan Sidi <yonicd@gmail.com>
 Description: Access functionality of the 'heatmaply' package through 'Shiny UI'.
 Depends:
     R (>= 2.3.0),
-    graphics,
-    stats,
+    heatmaply
+Imports:
+    dplyr,
+    viridis,
+    plotly,
+    jsonlite,
     shiny,
     RColorBrewer,
     readxl,
-    htmlwidgets,
-    htmltools,
-    plotly,
-    heatmaply,
+    utils,
     DT,
-    jsonlite,
     xtable,
-    dplyr
+    htmltools,
+    htmlwidgets
 License: GPL-2 | GPL-3
 URL: https://github.com/yonicd/shinyHeatmaply
 BugReports: https://github.com/yonicd/shinyHeatmaply/issues

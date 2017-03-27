@@ -1,4 +1,3 @@
-library(shinyHeatmaply)
 d=data(package='datasets')$results[,'Item']
 d=d[!grepl('[\\()]',d)]
 d=d[!d%in%c('UScitiesD','eurodist','sleep','warpbreaks')]
@@ -184,7 +183,7 @@ output$heatout <- renderPlotly({
 })
 
 #Render Data Table ----
-output$tables=renderDataTable(data.sel(),server = T,filter='top',
+output$tables=DT::renderDataTable(data.sel(),server = T,filter='top',
                               extensions = c('Scroller','FixedHeader','FixedColumns','Buttons','ColReorder'),
                               options = list(
                                 dom = 't',

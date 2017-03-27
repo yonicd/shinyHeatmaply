@@ -1,3 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+docs
 docs/\.nojekyll
+noBuild
+^.*\.jpg$
