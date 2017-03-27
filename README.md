@@ -18,7 +18,7 @@ devtools::install_github('yonicd/shinyHeatmaply')
 Run Application:
 
 ```
-runGitHub("yonicd/shinyHeatmaply",subdir = 'shinyapp')
+runGitHub("yonicd/shinyHeatmaply",subdir = 'inst/shinyapp')
 ```
 
 
