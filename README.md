@@ -2,7 +2,7 @@
 
 Shiny application and Shiny gadget for the [heatmaply](https://github.com/talgalili/heatmaply) pacakge. Functionality of the heatmaply package is accessed through Shiny UI. 
 
-This app comes with an added functionality to [save to disk](https://yonicd.github.io/shinyHeatmaply/) a self contained copy of the htmlwidget as an html file with your data and specifications you set from the UI, so it can embedded in webpages, blogposts and online web appendices for academic publications.
+We introduce a functionality that [saves to disk](https://yonicd.github.io/shinyHeatmaply/) a self contained copy of the htmlwidget as an html file with your data and specifications you set from the UI, so it can embedded in webpages, blogposts and online web appendices for academic publications.
 
 ### Video Introduction:
 
