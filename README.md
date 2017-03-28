@@ -1,6 +1,6 @@
 # shinyHeatmaply
 
-Shiny application and Shiny gadget for the [heatmaply](https://github.com/talgalili/heatmaply) pacakge. Functionality of the heatmaply package is accessed through Shiny UI. 
+Shiny application and Shiny gadget for the [heatmaply](https://github.com/talgalili/heatmaply) pacakge. Functionality of the heatmaply package is accessed through Shiny UI, with the ability to save to disk a copy of the htmlwidget with your data and specifications applied in the UI.
 
 ### Video Introduction:
 
