@@ -4,16 +4,16 @@ Shiny application and Shiny gadget for the [heatmaply](https://github.com/talgal
 
 Short Video Introducing shinyHeatmaply:
 
-<!----
+
 <center>
 <a href="http://www.youtube.com/watch?v=hANY_g1kB_A" target="_blank" ><img src="http://img.youtube.com/vi/hANY_g1kB_A/0.jpg" alt="shinyHeatmaply"></a>
 </center>
----->
 
+<!----
 <div class="iframe_container">
   <iframe width="560" height="315" src="http://www.youtube.com/embed/hANY_g1kB_A" frameborder="0" allowfullscreen></iframe>
 </div>
-
+---->
 
 Main difference between the Shiny application and the Shiny gadget:
 
