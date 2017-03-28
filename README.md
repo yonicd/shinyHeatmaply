@@ -1,3 +1,4 @@
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/shinyHeatmaply)](https://cran.r-project.org/package=shinyHeatmaply)
 # shinyHeatmaply
 
 Shiny application and Shiny gadget for the [heatmaply](https://github.com/talgalili/heatmaply) pacakge. Functionality of the heatmaply package is accessed through Shiny UI. 
