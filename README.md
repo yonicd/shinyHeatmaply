@@ -43,8 +43,15 @@ devtools::install_github('yonicd/shinyHeatmaply')
 
 Application:
 
+
 ```r
-runGitHub("yonicd/shinyHeatmaply",subdir = 'inst/shinyapp')
+library(shiny)
+library(heatmaply)
+# If you didn't get shinyHeatmaply yet, you can run it through github:
+# runGitHub("yonicd/shinyHeatmaply",subdir = 'inst/shinyapp')
+# or just use your locally installed package:
+library(shinyHeatmaply)
+runApp(system.file("shinyapp", package = "shinyHeatmaply"))
 ```
 
 
