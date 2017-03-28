@@ -135,9 +135,9 @@ interactiveHeatmap<- reactive({
     }
     if(input$transform_fun=='log') data.in[, ss_num]= apply(data.in[, ss_num],2,log)
     if(input$transform_fun=='sqrt') data.in[, ss_num]= apply(data.in[, ss_num],2,sqrt) 
-    if(input$transform_fun=='normalize') data.in=normalize(data.in)
+    if(input$transform_fun=='normalize') data.in=heatmaply::normalize(data.in)
     if(input$transform_fun=='scale') data.in[, ss_num] = scale(data.in[, ss_num])
-    if(input$transform_fun=='percentize') data.in=percentize(data.in)
+    if(input$transform_fun=='percentize') data.in=heatmaply::percentize(data.in)
   } 
       
       
