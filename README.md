@@ -1,4 +1,7 @@
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/shinyHeatmaply)](https://cran.r-project.org/package=shinyHeatmaply)
+[![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/0.1.0/active.svg)](http://www.repostatus.org/#active) 
+![downloads](http://cranlogs.r-pkg.org/badges/grand-total/shinyHeatmaply)
+
 # shinyHeatmaply
 
 Shiny application and Shiny gadget for the [heatmaply](https://github.com/talgalili/heatmaply) pacakge. Functionality of the heatmaply package is accessed through Shiny UI. 
