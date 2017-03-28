@@ -7,7 +7,7 @@ if(viewerType=='dialogViewer'){
   if(is.null(viewerDots$height)) viewerDots$height=1000
 } 
 
-viewer<-do.call(viewerType,viewerDots)
+viewer<-do.call(eval(parse(text=paste0('shiny::',viewerType))),viewerDots)
 #UI----
   ui <- shiny::shinyUI(
     shiny::fluidPage(

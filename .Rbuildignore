@@ -4,3 +4,4 @@ docs
 docs/\.nojekyll
 noBuild
 ^.*\.jpg$
+^.*\.jpeg$
