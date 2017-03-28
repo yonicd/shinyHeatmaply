@@ -2,12 +2,9 @@
 
 Shiny application and Shiny gadget for the [heatmaply](https://github.com/talgalili/heatmaply) pacakge. Functionality of the heatmaply package is accessed through Shiny UI. 
 
-###Video Introduction:
+### Video Introduction:
 
-
-<center>
 <a href="http://www.youtube.com/watch?v=hANY_g1kB_A" target="_blank" ><img src="http://img.youtube.com/vi/hANY_g1kB_A/0.jpg" alt="shinyHeatmaply"></a>
-</center>
 
 <!----
 <div class="iframe_container">
@@ -15,7 +12,7 @@ Shiny application and Shiny gadget for the [heatmaply](https://github.com/talgal
 </div>
 ---->
 
-###Install
+### Install
 
   - CRAN:
 
@@ -29,14 +26,14 @@ install_packages('shinyHeatmaply')
 devtools::install_github('yonicd/shinyHeatmaply')
 ```
 
-###Shiny App or Shiny Gadget?
+### Shiny App or Shiny Gadget?
 
   - The application has an import interface as part of the application.
     - Currently: csv,txt,tab,xls,xlsx,rd,rda files are supported.
 
   - The gadget is called from the R console and accepts input arguments. The object defined as the input to the shinyHeatmaply gadget is a data.frame or a list of data.frames.
 
-###Launching
+### Launching
 
 Application:
 
@@ -59,7 +56,7 @@ data(iris)
 launch_heatmaply(list('Example1'=mtcars,'Example2'=iris))
 ```
 
-###Example of saved htmlwidget [Output](https://yonicd.github.io/shinyHeatmaply/)
+### Example of saved htmlwidget [Output](https://yonicd.github.io/shinyHeatmaply/)
 <!----
 <iframe width="854" height="480" src="https://yonicd.github.io/shinyHeatmaply/" frameborder="0" allowfullscreen></iframe>
 ---->
