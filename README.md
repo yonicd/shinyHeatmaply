@@ -23,7 +23,7 @@ We introduce a functionality that [saves to disk](https://yonicd.github.io/shiny
   - CRAN:
 
 ```r
-install_packages('shinyHeatmaply')
+install.packages('shinyHeatmaply')
 ```
 
   - Dev:
