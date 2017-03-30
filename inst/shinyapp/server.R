@@ -42,7 +42,11 @@ output$data=renderUI({
 
 #Color Pallete UI ----
 output$colUI<-renderUI({
-  colSel=ifelse(input$transform_fun=='cor','RdBu','Vidiris')
+  
+  colSel='Vidiris'
+  if(input$transform_fun=='cor') colSel='RdBu'
+  if(input$transform_fun=='is.na10') colSel='grey.colors'
+  
   selectizeInput(inputId ="pal", label ="Select Color Palette",
                  choices = c('Vidiris (Sequential)'="viridis",
                              'Magma (Sequential)'="magma",
@@ -124,10 +128,13 @@ interactiveHeatmap<- reactive({
   } 
   
   ss_num =  sapply(data.in, is.numeric) # in order to only transform the numeric values
-    
+
   if(input$transpose) data.in=t(data.in)
   if(input$transform_fun!='.'){
-    if(input$transform_fun=='is.na10') data.in=is.na10(data.in)
+    if(input$transform_fun=='is.na10'){
+      updateCheckboxInput(session = session,inputId = 'showColor',value = T)
+      data.in[, ss_num]=is.na10(data.in[, ss_num])
+    } 
     if(input$transform_fun=='cor'){
       updateCheckboxInput(session = session,inputId = 'showColor',value = T)
       updateCheckboxInput(session = session,inputId = 'colRngAuto',value = F)
@@ -139,7 +146,8 @@ interactiveHeatmap<- reactive({
     if(input$transform_fun=='scale') data.in[, ss_num] = scale(data.in[, ss_num])
     if(input$transform_fun=='percentize') data.in=heatmaply::percentize(data.in)
   } 
-      
+  
+
       
   if(!is.null(input$tables_true_search_columns)) 
     data.in=data.in[activeRows(input$tables_true_search_columns,data.in),]

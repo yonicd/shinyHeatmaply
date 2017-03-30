@@ -124,7 +124,10 @@ viewer<-do.call(eval(parse(text=paste0('shiny::',viewerType))),viewerDots)
     })
     
     output$colUI<-shiny::renderUI({
-      colSel=ifelse(input$transform_fun=='cor','RdBu','Vidiris')
+      colSel='Vidiris'
+      if(input$transform_fun=='cor') colSel='RdBu'
+      if(input$transform_fun=='is.na10') colSel='grey.colors'
+      
       shiny::selectizeInput(inputId ="pal", label ="Select Color Palette",
                      choices = c('Vidiris (Sequential)'="viridis",
                                  'Magma (Sequential)'="magma",
@@ -194,7 +197,10 @@ viewer<-do.call(eval(parse(text=paste0('shiny::',viewerType))),viewerDots)
       
       if(input$transpose) data.in=t(data.in)
       if(input$transform_fun!='.'){
-        if(input$transform_fun=='is.na10') data.in=heatmaply::is.na10(data.in)
+        if(input$transform_fun=='is.na10'){
+          shiny::updateCheckboxInput(session = session,inputId = 'showColor',value = T)
+          data.in[, ss_num]=is.na10(data.in[, ss_num])
+        } 
         if(input$transform_fun=='cor'){
           shiny::updateCheckboxInput(session = session,inputId = 'showColor',value = T)
           shiny::updateCheckboxInput(session = session,inputId = 'colRngAuto',value = F)
