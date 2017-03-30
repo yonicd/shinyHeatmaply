@@ -11,7 +11,7 @@ Maintainer: Jonathan Sidi <yonicd@gmail.com>
 Description: Access functionality of the 'heatmaply' package through 'Shiny UI'.
 Depends:
     R (>= 2.3.0),
-    heatmaply
+    heatmaply (>= 0.8.2)
 Imports:
     dplyr,
     viridis,
