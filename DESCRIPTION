@@ -1,7 +1,7 @@
 Package: shinyHeatmaply
 Type: Package
 Title: Deploy 'heatmaply' using 'shiny'
-Version: 0.1.1
+Version: 0.1.2
 Date: 2017-03-27
 Authors@R: c(
               person(given = 'Jonathan',family = 'Sidi',email = 'yonicd@gmail.com',role = c('aut','cre')),
