@@ -190,7 +190,8 @@ viewer<-do.call(eval(parse(text=paste0('shiny::',viewerType))),viewerDots)
       }
       
       if(length(input$annoVar)>0){
-        if(all(input$annoVar%in%names(data.in))) data.in=data.in%>%mutate_each_(funs(factor),input$annoVar)
+        if(all(input$annoVar%in%names(data.in))) 
+          data.in <- data.in%>%mutate_at(funs(factor),.vars=vars(input$annoVar))
       } 
       
       ss_num =  sapply(data.in, is.numeric) # in order to only transform the numeric values
@@ -228,7 +229,7 @@ viewer<-do.call(eval(parse(text=paste0('shiny::',viewerType))),viewerDots)
       hclustfun_row = function(x) stats::hclust(x, method = input$hclustFun_row)
       hclustfun_col = function(x) stats::hclust(x, method = input$hclustFun_col)
       
-      heatmaply::heatmaply(data.in,
+      p <- heatmaply::heatmaply(data.in,
                 main = input$main,xlab = input$xlab,ylab = input$ylab,
                 row_text_angle = input$row_text_angle,
                 column_text_angle = input$column_text_angle,
@@ -244,6 +245,10 @@ viewer<-do.call(eval(parse(text=paste0('shiny::',viewerType))),viewerDots)
                 k_row = input$r,
                 limits = ColLimits) %>% 
         plotly::layout(margin = list(l = input$l, b = input$b))
+      
+      p$elementId <- NULL
+      
+      p
       
     })
     

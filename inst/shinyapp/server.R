@@ -124,7 +124,8 @@ interactiveHeatmap<- reactive({
   # ss_num = sapply(data.in,function(x) class(x)) %in% c('numeric','integer') # in order to only transform the numeric values
   
   if(length(input$annoVar)>0){
-    if(all(input$annoVar%in%names(data.in))) data.in=data.in%>%mutate_each_(funs(factor),input$annoVar)
+    if(all(input$annoVar%in%names(data.in))) 
+      data.in <- data.in%>%mutate_at(funs(factor),.vars=vars(input$annoVar))
   } 
   
   ss_num =  sapply(data.in, is.numeric) # in order to only transform the numeric values
@@ -163,7 +164,7 @@ interactiveHeatmap<- reactive({
   hclustfun_row = function(x) hclust(x, method = input$hclustFun_row)
   hclustfun_col = function(x) hclust(x, method = input$hclustFun_col)
   
-  heatmaply(data.in,
+  p <- heatmaply(data.in,
             main = input$main,xlab = input$xlab,ylab = input$ylab,
             row_text_angle = input$row_text_angle,
             column_text_angle = input$column_text_angle,
@@ -178,8 +179,11 @@ interactiveHeatmap<- reactive({
             k_col = input$c, 
             k_row = input$r,
             limits = ColLimits) %>% 
-    layout(margin = list(l = input$l, b = input$b))
+    layout(margin = list(l = input$l, b = input$b, r='0px'))
     
+  p$elementId <- NULL
+  
+  p
 })
 
 #Render Plot ----

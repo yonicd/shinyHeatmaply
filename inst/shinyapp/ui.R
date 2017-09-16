@@ -70,7 +70,7 @@ ui <- shinyUI(
       tabPanel("Data",
                DT::dataTableOutput('tables')
                )
-    ) 
+    )
   )
 )
 )
