@@ -4,6 +4,8 @@
 #'@return data.frame
 #'@export
 #'@keywords internal
+#' @importFrom utils read.delim
+#' @importFrom readxl read_excel
 importSwitch=function(file){
   type=tolower(gsub('^(.*?)\\.','',file$name))
   

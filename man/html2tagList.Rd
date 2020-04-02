@@ -13,7 +13,6 @@ html2tagList(x)
 convert raw html to tagList
 }
 \examples{
-\donttest{
 x<-'<h1>Title</h1>
    <h2>Header text</h2>
    <p>Text here</p>
@@ -24,12 +23,11 @@ x<-'<h1>Title</h1>
  html2tagList(x)  
 
 require(xtable)
-htmlIn<-print(xtable::xtable(mtcars),type = 'html',print.results = F)
+htmlIn<-print(xtable::xtable(mtcars),type = 'html',print.results = FALSE)
 htmlIn
 tagL<-html2tagList(htmlIn)
 class(tagL)
 tagL
 if(interactive()) htmltools::browsable(tagL)
-}
 }
 \keyword{internal}

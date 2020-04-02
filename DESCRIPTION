@@ -1,8 +1,8 @@
 Package: shinyHeatmaply
 Type: Package
 Title: Deploy 'heatmaply' using 'shiny'
-Version: 0.1.2
-Date: 2017-09-16
+Version: 0.2.0
+Date: 2020-04-02
 Authors@R: c(
               person(given = 'Jonathan',family = 'Sidi',email = 'yonicd@gmail.com',role = c('aut','cre')),
               person(given = 'Tal',family = 'Galili',email = 'tal.galili@metrumrg.com',role = c('aut'))
@@ -11,24 +11,12 @@ Maintainer: Jonathan Sidi <yonicd@gmail.com>
 Description: Access functionality of the 'heatmaply' package through 'Shiny UI'.
 Depends:
     R (>= 2.3.0),
-    heatmaply (>= 0.8.2)
-Imports:
-    dplyr,
-    viridis,
-    plotly,
-    jsonlite,
-    shiny,
-    RColorBrewer,
-    readxl,
-    utils,
-    DT,
-    xtable,
-    htmltools,
-    htmlwidgets
+    heatmaply (>= 1.0.0)
+Imports: shiny,htmltools,plotly,dplyr,stats,xtable,tools,rmarkdown,utils,readxl
 License: GPL-2 | GPL-3
 URL: https://github.com/yonicd/shinyHeatmaply
 BugReports: https://github.com/yonicd/shinyHeatmaply/issues
 LazyData: true
 NeedsCompilation: no
 Packaged: 2017-01-31 14:00:00 UTC; Yoni
-RoxygenNote: 6.0.1
+RoxygenNote: 7.0.2

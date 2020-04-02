@@ -46,7 +46,7 @@ viewer<-do.call(eval(parse(text=paste0('shiny::',viewerType))),viewerDots)
                            htmltools::h4('Color Manipulation'),
                            shiny::uiOutput('colUI'),
                            shiny::sliderInput("ncol", "Set Number of Colors", min = 1, max = 256, value = 256),
-                           shiny::checkboxInput('colRngAuto','Auto Color Range',value = T),
+                           shiny::checkboxInput('colRngAuto','Auto Color Range',value = TRUE),
                            shiny::conditionalPanel('!input.colRngAuto',shiny::uiOutput('colRng'))
           ),
           
@@ -79,7 +79,7 @@ viewer<-do.call(eval(parse(text=paste0('shiny::',viewerType))),viewerDots)
                      plotly::plotlyOutput("heatout",height=paste0(plotHeight,'px'))
             ),
             shiny::tabPanel("Data",
-                     DT::dataTableOutput('tables')
+                     shiny::dataTableOutput('tables')
             )
           ) 
         )
@@ -87,7 +87,15 @@ viewer<-do.call(eval(parse(text=paste0('shiny::',viewerType))),viewerDots)
     )
   )
 #Server---- 
-
+#' @import shiny
+#' @import htmltools
+#' @importFrom plotly plotlyOutput layout renderPlotly
+#' @importFrom dplyr mutate_at vars
+#' @import heatmaply
+#' @importFrom stats cor dist hclust
+#' @importFrom xtable xtable
+#' @importFrom tools file_path_sans_ext
+#' @importFrom rmarkdown pandoc_available pandoc_self_contained_html
   server <- function(input, output,session) {	
     
     output$data=shiny::renderUI({
@@ -109,7 +117,7 @@ viewer<-do.call(eval(parse(text=paste0('shiny::',viewerType))),viewerDots)
           NM=names(data.in)[which(sapply(data.in,class)=='factor')]  
         } 
         shiny::column(width=4,
-                      shiny::selectizeInput('annoVar','Annotation',choices = names(data.in),selected=NM,multiple=T,options = list(placeholder = 'select columns',plugins = list("remove_button")))
+                      shiny::selectizeInput('annoVar','Annotation',choices = names(data.in),selected=NM,multiple=TRUE,options = list(placeholder = 'select columns',plugins = list("remove_button")))
         )
       })
       
@@ -118,7 +126,7 @@ viewer<-do.call(eval(parse(text=paste0('shiny::',viewerType))),viewerDots)
         list(
           shiny::column(4,shiny::textInput(inputId = 'setSeed',label = 'Seed',value = sample(1:10000,1))),
           shiny::column(4,shiny::numericInput(inputId = 'selRows',label = 'Number of Rows',min=1,max=pmin(500,nrow(data.sel())),value = pmin(500,nrow(data.sel())))),
-          shiny::column(4,shiny::selectizeInput('selCols','Columns Subset',choices = names(data.sel()),multiple=T))
+          shiny::column(4,shiny::selectizeInput('selCols','Columns Subset',choices = names(data.sel()),multiple=TRUE))
         )
       })
     })
@@ -191,7 +199,7 @@ viewer<-do.call(eval(parse(text=paste0('shiny::',viewerType))),viewerDots)
       
       if(length(input$annoVar)>0){
         if(all(input$annoVar%in%names(data.in))) 
-          data.in <- data.in%>%mutate_at(funs(factor),.vars=vars(input$annoVar))
+          data.in <- data.in%>%dplyr::mutate_at(dplyr::vars(input$annoVar),list(factor))
       } 
       
       ss_num =  sapply(data.in, is.numeric) # in order to only transform the numeric values
@@ -199,12 +207,12 @@ viewer<-do.call(eval(parse(text=paste0('shiny::',viewerType))),viewerDots)
       if(input$transpose) data.in=t(data.in)
       if(input$transform_fun!='.'){
         if(input$transform_fun=='is.na10'){
-          shiny::updateCheckboxInput(session = session,inputId = 'showColor',value = T)
-          data.in[, ss_num]=is.na10(data.in[, ss_num])
+          shiny::updateCheckboxInput(session = session,inputId = 'showColor',value = TRUE)
+          data.in[, ss_num] = heatmaply::is.na10(data.in[, ss_num])
         } 
         if(input$transform_fun=='cor'){
-          shiny::updateCheckboxInput(session = session,inputId = 'showColor',value = T)
-          shiny::updateCheckboxInput(session = session,inputId = 'colRngAuto',value = F)
+          shiny::updateCheckboxInput(session = session,inputId = 'showColor',value = TRUE)
+          shiny::updateCheckboxInput(session = session,inputId = 'colRngAuto',value = FALSE)
           data.in=stats::cor(data.in[, ss_num],use = "pairwise.complete.obs")
         }
         if(input$transform_fun=='log') data.in[, ss_num]= apply(data.in[, ss_num],2,log)
@@ -258,7 +266,7 @@ viewer<-do.call(eval(parse(text=paste0('shiny::',viewerType))),viewerDots)
       })
     })
     
-    output$tables=DT::renderDataTable(data.sel(),server = T,filter='top',
+    output$tables=shiny::renderDataTable(data.sel(),server = TRUE,filter='top',
                                   extensions = c('Scroller','FixedHeader','FixedColumns','Buttons','ColReorder'),
                                   options = list(
                                     dom = 't',
@@ -293,9 +301,9 @@ viewer<-do.call(eval(parse(text=paste0('shiny::',viewerType))),viewerDots)
       )
       
       
-      l=data.frame(Parameter=names(l),Value=do.call('rbind',l),row.names = NULL,stringsAsFactors = F)
+      l=data.frame(Parameter=names(l),Value=do.call('rbind',l),row.names = NULL,stringsAsFactors = FALSE)
       l[which(l$Value==''),2]='NULL'
-      paramTbl=print(xtable::xtable(l),type = 'html',include.rownames=FALSE,print.results = F,html.table.attributes = c('border=0'))
+      paramTbl=print(xtable::xtable(l),type = 'html',include.rownames=FALSE,print.results = FALSE,html.table.attributes = c('border=0'))
       
       
       h$width='100%'
@@ -316,14 +324,13 @@ viewer<-do.call(eval(parse(text=paste0('shiny::',viewerType))),viewerDots)
           libdir <- paste(tools::file_path_sans_ext(basename(file)),"_files", sep = "")
           
           htmltools::save_html(htmltools::browsable(htmltools::tagList(h,s)),file=file,libdir = libdir)
-          # if (!htmlwidgets:::pandoc_available()) {
-          if (!pandoc_available()) {
+
+          if (!rmarkdown::pandoc_available()) {
             stop("Saving a widget with selfcontained = TRUE requires pandoc. For details see:\n", 
                  "https://github.com/rstudio/rmarkdown/blob/master/PANDOC.md")
           }
           
-          # htmlwidgets:::pandoc_self_contained_html(file, file)
-          pandoc_self_contained_html(file, file)
+          rmarkdown::pandoc_self_contained_html(file, file)
           unlink(libdir, recursive = TRUE)
         }
       )

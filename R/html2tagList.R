@@ -2,7 +2,6 @@
 #'@description convert raw html to tagList
 #'@param x character vector of html
 #'@examples 
-#'\donttest{
 #'x<-'<h1>Title</h1>
 #'    <h2>Header text</h2>
 #'    <p>Text here</p>
@@ -13,15 +12,15 @@
 #'  html2tagList(x)  
 #'
 #'require(xtable)
-#'htmlIn<-print(xtable::xtable(mtcars),type = 'html',print.results = F)
+#'htmlIn<-print(xtable::xtable(mtcars),type = 'html',print.results = FALSE)
 #'htmlIn
 #'tagL<-html2tagList(htmlIn)
 #'class(tagL)
 #'tagL
 #'if(interactive()) htmltools::browsable(tagL)
-#'}
 #'@export
 #'@keywords internal
+#'@import htmltools
 html2tagList<-function(x){
   
   x<-strsplit(gsub('>','>_AAA_',x),'_AAA_')[[1]]
@@ -57,10 +56,10 @@ html2tagList<-function(x){
     endVal=paste0("'",gsub('),',"'),",endVal))
     x[endIdx]=endVal
   
-  #remove last comma from collpased string
+  #remove last comma from collapsed string
     xout=paste0(x,collapse = '')
     xout=gsub(',$','',xout)
   #eval to tagList object
-    xout<-eval(parse(text=sprintf('tagList(list(%s))',xout)))
+    xout<-eval(parse(text=sprintf('htmltools::tagList(list(%s))',xout),keep.source = TRUE))
   return(xout)
 }
