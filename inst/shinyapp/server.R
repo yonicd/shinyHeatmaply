@@ -247,10 +247,10 @@ observeEvent({interactiveHeatmap()},{
   
   output$downloadData <- downloadHandler(
     filename = function() {
-      paste("heatmaply-", gsub(' ','_',Sys.time()), ".html", sep="")
+      paste0("heatmaply-", strftime(Sys.time(),'%Y%m%d_%H%M%S'), ".html")
     },
     content = function(file) {
-      libdir <- paste(tools::file_path_sans_ext(basename(file)),"_files", sep = "")
+      libdir <- paste0(tools::file_path_sans_ext(basename(file)),"_files")
 
       htmltools::save_html(htmltools::browsable(htmltools::tagList(h,s)),file=file,libdir = libdir)
       if (!htmlwidgets:::pandoc_available()) {
