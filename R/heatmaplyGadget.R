@@ -266,8 +266,10 @@ viewer<-do.call(eval(parse(text=paste0('shiny::',viewerType))),viewerDots)
       })
     })
     
-    output$tables=shiny::renderDataTable(data.sel(),server = TRUE,filter='top',
-                                  extensions = c('Scroller','FixedHeader','FixedColumns','Buttons','ColReorder'),
+    output$tables=shiny::renderDataTable(data.sel(),
+                                         #server = TRUE,
+                                         #filter='top',
+                                  #extensions = c('Scroller','FixedHeader','FixedColumns','Buttons','ColReorder'),
                                   options = list(
                                     dom = 't',
                                     buttons = c('copy', 'csv', 'excel', 'pdf', 'print','colvis'),
